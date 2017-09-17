@@ -34,12 +34,15 @@ create_dockerfile_from_id() {
     popd
 }
 
-# create_dockerfile_from_id "ubuntu-sshd"
-# create_dockerfile_from_id "dev"
+create_dockerfile_from_id "ubuntu-sshd"
+create_dockerfile_from_id "dev"
+create_dockerfile_from_id "dev-lang"
+create_dockerfile_from_id "irssi"
 
-# build_from_id "ubuntu-sshd"
-build_from_id "dev"
-build_from_id "dev-lang"
+#build_from_id "ubuntu-sshd"
+#build_from_id "dev"
+#build_from_id "dev-lang"
+#build_from_id "irssi"
 
 
 # cd docker-ubuntu-sshd
