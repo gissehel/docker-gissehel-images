@@ -2,6 +2,7 @@
 
 VERSION="1.03"
 badgesfilenames="badges.md"
+USE_BADGES=1
 
 create_dockerfile() {
     filename="$1"
@@ -86,24 +87,37 @@ build_from_id() {
 create_dockerfile_from_id() {
     id="$1"
     pushd .
-    add_badge "${id}"
+    [ "${USE_BADGES}" == "1" ] && add_badge "${id}"
     cd "docker-${id}"
     create_dockerfile "script.sh" "Dockerfile" "${id}"
     create_build_hook "${id}"
     popd
 }
 
-init_badges
-create_dockerfile_from_id "ubuntu-sshd"
-create_dockerfile_from_id "dev"
-create_dockerfile_from_id "dev-lang"
-create_dockerfile_from_id "irssi"
-create_readme
+name="$1"
 
-#build_from_id "ubuntu-sshd"
-#build_from_id "dev"
-#build_from_id "dev-lang"
-#build_from_id "irssi"
+if [ -z "${name}" ]; then
+
+  init_badges
+  create_dockerfile_from_id "ubuntu-sshd"
+  create_dockerfile_from_id "dev"
+  create_dockerfile_from_id "dev-lang"
+  create_dockerfile_from_id "dev-dl"
+  create_dockerfile_from_id "dev-lang-java"
+  create_dockerfile_from_id "irssi"
+  create_readme
+
+else
+  USE_BADGES=0
+  build_from_id "${name}"
+
+  #build_from_id "ubuntu-sshd"
+  #build_from_id "dev"
+  #build_from_id "dev-lang"
+  #build_from_id "dev-dl"
+  #build_from_id "irssi"
+
+fi
 
 
 # cd docker-ubuntu-sshd
