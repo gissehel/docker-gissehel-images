@@ -54,11 +54,11 @@ init_badges() {
 add_badge() {
     id="$1"
 
-    echo -n "*" >> "${badgesfilenames}"
+    echo -n "" >> "${badgesfilenames}"
     echo -n " [![](https://images.microbadger.com/badges/image/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own image badge on microbadger.com\")" >> "${badgesfilenames}"
     echo -n " [![](https://images.microbadger.com/badges/version/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own version badge on microbadger.com\")" >> "${badgesfilenames}"
     echo -n " [![](https://images.microbadger.com/badges/commit/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own commit badge on microbadger.com\")" >> "${badgesfilenames}"
-    echo -n " : ${id}" >> "${badgesfilenames}"
+    echo -n " ${id}" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
