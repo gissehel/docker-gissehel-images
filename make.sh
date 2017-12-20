@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="1.03"
+VERSION="1.04"
 badgesfilenames="badges.md"
 USE_BADGES=1
 
@@ -59,7 +59,7 @@ add_badge() {
     echo -n " [![](https://images.microbadger.com/badges/image/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own image badge on microbadger.com\")" >> "${badgesfilenames}"
     echo -n " [![](https://images.microbadger.com/badges/version/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own version badge on microbadger.com\")" >> "${badgesfilenames}"
     echo -n " [![](https://images.microbadger.com/badges/commit/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own commit badge on microbadger.com\")" >> "${badgesfilenames}"
-    echo -n " gissehel/${id}" >> "${badgesfilenames}"
+    echo -n " [gissehel/${id}](https://hub.docker.com/r/gissehel/${id})" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
@@ -102,8 +102,8 @@ if [ -z "${name}" ]; then
   create_dockerfile_from_id "ubuntu-sshd"
   create_dockerfile_from_id "dev"
   create_dockerfile_from_id "dev-lang"
-  create_dockerfile_from_id "dev-dl"
   create_dockerfile_from_id "dev-lang-java"
+  create_dockerfile_from_id "dev-dl"
   create_dockerfile_from_id "irssi"
   create_readme
 
