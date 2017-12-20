@@ -39,7 +39,7 @@ create_build_hook() {
     echo "" >> "${filename}"
     echo '#!/bin/bash' > "${filename}"
     echo '# $IMAGE_NAME var is injected into the build so the tag is correct.' >> "${filename}"
-    echo 'docker build --build-arg VCS_REF=`git rev-parse — short HEAD` --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` -t ${IMAGE_NAME} .' >> "${filename}"
+    echo 'docker build --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` -t ${IMAGE_NAME} .' >> "${filename}"
 }
 
 build() {
