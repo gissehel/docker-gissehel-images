@@ -27,19 +27,23 @@ create_dockerfile() {
 
 create_build_hook() {
     dirname="hooks"
-    mkdir -p "${dirname}"
-    filename="${dirname}/build"
     id="$1"
-    echo "" > "${filename}"
-    echo "" >> "${filename}"
-    echo "" >> "${filename}"
-    echo "" >> "${filename}"
-    echo "" >> "${filename}"
-    echo "" >> "${filename}"
-    echo "" >> "${filename}"
+
+    mkdir -p "${dirname}"
+
+    filename="${dirname}/build"
+
     echo '#!/bin/bash' > "${filename}"
     echo '# $IMAGE_NAME var is injected into the build so the tag is correct.' >> "${filename}"
     echo 'docker build --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` -t ${IMAGE_NAME} .' >> "${filename}"
+
+    filename="${dirname}/post_push"
+
+    echo "#!/bin/bash" > "${filename}"
+    echo "" >> "${filename}"
+    echo 'GIT_SHA_TAG='"${VERSION}"'-`git rev-parse --short HEAD`' >> "${filename}"
+    echo "docker tag \$IMAGE_NAME \$DOCKER_REPO:\$GIT_SHA_TAG" >> "${filename}"
+    echo "docker push \$DOCKER_REPO:\$GIT_SHA_TAG" >> "${filename}"
 }
 
 build() {
