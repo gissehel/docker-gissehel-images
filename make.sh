@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="1.1"
+VERSION="1.2"
 badgesfilenames="badges.md"
 
 create_dockerfile() {
@@ -54,9 +54,11 @@ init_badges() {
 add_badge() {
     id="$1"
 
-    echo "[![](https://images.microbadger.com/badges/image/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own image badge on microbadger.com\")" >> "${badgesfilenames}"
-    echo "[![](https://images.microbadger.com/badges/version/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own version badge on microbadger.com\")" >> "${badgesfilenames}"
-    echo "[![](https://images.microbadger.com/badges/commit/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own commit badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo -n "* ${id}" >> "${badgesfilenames}"
+    echo -n " [![](https://images.microbadger.com/badges/image/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own image badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo -n " [![](https://images.microbadger.com/badges/version/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own version badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo -n " [![](https://images.microbadger.com/badges/commit/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own commit badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo "" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
 }
