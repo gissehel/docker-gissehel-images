@@ -1,7 +1,3 @@
-The goal of this repository is to store the Dockerfiles I use for dev.
-
-Thoses images fit my needs so won't be very usefull for anyone else.
-
 
 [![](https://images.microbadger.com/badges/image/gissehel/ubuntu-sshd.svg)](https://microbadger.com/images/gissehel/ubuntu-sshd "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/gissehel/ubuntu-sshd.svg)](https://microbadger.com/images/gissehel/ubuntu-sshd "Get your own version badge on microbadger.com")

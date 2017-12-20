@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 VERSION="1.1"
+badgesfilenames="badges.md"
 
 create_dockerfile() {
     filename="$1"
@@ -46,6 +47,24 @@ create_build_hook() {
     echo "docker push \$DOCKER_REPO:\$GIT_SHA_TAG" >> "${filename}"
 }
 
+init_badges() {
+    echo "" > "${badgesfilenames}"
+}
+
+add_badge() {
+    id="$1"
+
+    echo "[![](https://images.microbadger.com/badges/image/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own image badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo "[![](https://images.microbadger.com/badges/version/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own version badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo "[![](https://images.microbadger.com/badges/commit/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own commit badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo "" >> "${badgesfilenames}"
+    echo "" >> "${badgesfilenames}"
+}
+
+create_readme() {
+    cat "README-base.md" "${badgesfilenames}" > "README.md"
+}
+
 build() {
     dirname="$1"
     tag="$2"
@@ -64,16 +83,19 @@ build_from_id() {
 create_dockerfile_from_id() {
     id="$1"
     pushd .
+    add_badge "${id}"
     cd "docker-${id}"
     create_dockerfile "script.sh" "Dockerfile" "${id}"
     create_build_hook "${id}"
     popd
 }
 
+init_badges
 create_dockerfile_from_id "ubuntu-sshd"
 create_dockerfile_from_id "dev"
 create_dockerfile_from_id "dev-lang"
 create_dockerfile_from_id "irssi"
+create_readme
 
 #build_from_id "ubuntu-sshd"
 #build_from_id "dev"
