@@ -21,7 +21,7 @@ make install
 su -l "$LOGIN" bash -c "/usr/bin/plowmod --install"
 BASH_HISTORY="$HOME_USER/.bash_history"
 echo "curl http://monip.org" >> "${BASH_HISTORY}"
-echo "curl -s http://monip.org | perl -ape 's/<[^>]+>/ /mg; s/ +/ /mg'| grep \" IP \" --color=never | perl -ape 's{ IP : (\S+) (\S+) (.*)}{$1\n$2\n$3}'" >> "${BASH_HISTORY}"
+echo "curl -s http://monip.org | perl -ape 's/<[^>]+>/ /mg; s/ +/ /mg'| grep \" IP \" --color=never | perl -ape 's{ IP : (\S+) (\S+) (.*)}{\$1\n\$2\n\$3}'" >> "${BASH_HISTORY}"
 chown gissehel:gissehel "${BASH_HISTORY}"
 chmod 0644 "${BASH_HISTORY}"
 
