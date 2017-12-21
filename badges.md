@@ -17,3 +17,6 @@
  [![](https://images.microbadger.com/badges/image/gissehel/irssi.svg)](https://microbadger.com/images/gissehel/irssi "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/gissehel/irssi.svg)](https://microbadger.com/images/gissehel/irssi "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/commit/gissehel/irssi.svg)](https://microbadger.com/images/gissehel/irssi "Get your own commit badge on microbadger.com") [gissehel/irssi](https://hub.docker.com/r/gissehel/irssi)
 
 
+ [![](https://images.microbadger.com/badges/image/gissehel/rtorrent.svg)](https://microbadger.com/images/gissehel/rtorrent "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/gissehel/rtorrent.svg)](https://microbadger.com/images/gissehel/rtorrent "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/commit/gissehel/rtorrent.svg)](https://microbadger.com/images/gissehel/rtorrent "Get your own commit badge on microbadger.com") [gissehel/rtorrent](https://hub.docker.com/r/gissehel/rtorrent)
+
+

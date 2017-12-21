@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="1.04"
+VERSION="1.05"
 badgesfilenames="badges.md"
 USE_BADGES=1
 
@@ -105,6 +105,7 @@ if [ -z "${name}" ]; then
   create_dockerfile_from_id "dev-lang-java"
   create_dockerfile_from_id "dev-dl"
   create_dockerfile_from_id "irssi"
+  create_dockerfile_from_id "rtorrent"
   create_readme
 
 else
