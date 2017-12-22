@@ -37,7 +37,3 @@ rm -f /var/log/dpkg.log
 rm -rf /var/log/apt
 rm -rf /var/cache/apt
 
-rm -f /tmp/script.sh
-
-echo ""
-
