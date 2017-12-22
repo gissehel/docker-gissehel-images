@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="1.05"
+VERSION="1.06"
 badgesfilenames="badges.md"
 USE_BADGES=1
 
@@ -25,6 +25,8 @@ create_dockerfile() {
     echo "" >> "${dockerfilename}"
     echo "ADD ${filename} /tmp/create-image-script" >> "${dockerfilename}"
     echo "RUN ${shell} /tmp/create-image-script && rm -f /tmp/create-image-script" >> "${dockerfilename}"
+    echo "" >> "${dockerfilename}"
+    cat "${filename}" | grep '^#:E ' | sed -e 's/^#:E //' | sed -e "s/{id}/${id}/g" >> "${dockerfilename}"
 }
 
 create_build_hook() {
@@ -99,6 +101,7 @@ name="$1"
 if [ -z "${name}" ]; then
 
   init_badges
+
   create_dockerfile_from_id "ubuntu-sshd"
   create_dockerfile_from_id "dev"
   create_dockerfile_from_id "dev-lang"
@@ -106,17 +109,18 @@ if [ -z "${name}" ]; then
   create_dockerfile_from_id "dev-dl"
   create_dockerfile_from_id "irssi"
   create_dockerfile_from_id "rtorrent"
+
+  create_dockerfile_from_id "ubuntu-base"
+  create_dockerfile_from_id "squid"
+  create_dockerfile_from_id "squid-open"
+  create_dockerfile_from_id "gollum"
+
   create_readme
 
 else
+
   USE_BADGES=0
   build_from_id "${name}"
-
-  #build_from_id "ubuntu-sshd"
-  #build_from_id "dev"
-  #build_from_id "dev-lang"
-  #build_from_id "dev-dl"
-  #build_from_id "irssi"
 
 fi
 
