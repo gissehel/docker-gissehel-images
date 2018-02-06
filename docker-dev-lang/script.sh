@@ -16,6 +16,7 @@ apt-get -y install python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev
 apt-get -y install python-psycopg2
 apt-get -y install python-kivy kivy-examples
 apt-get -y install cmdtest
+apt-get -y install unrar
 pip install --upgrade beautifulsoup4 html5lib requests_toolbelt requests PyYAML ndg_httpsclient
 pip install --upgrade pymongo django
 apt-get -y install nodejs
