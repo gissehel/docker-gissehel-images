@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="1.08"
+VERSION="1.09"
 badgesfilenames="badges.md"
 USE_BADGES=1
 

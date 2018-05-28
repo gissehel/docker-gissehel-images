@@ -4,15 +4,16 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-echo "deb http://archive.ubuntu.com/ubuntu bionic multiverse" >> /etc/apt/sources.list
+# echo "deb http://archive.ubuntu.com/ubuntu bionic multiverse" >> /etc/apt/sources.list
 apt-get update -y
+apt-get install -y apt-utils locales
+
 locale-gen "en_US.UTF-8"
 dpkg-reconfigure locales
 
-#apt-mark hold initscripts
-#apt-mark hold fuse
+apt-get update -y
 apt-get -y upgrade
-apt-get -y install unzip wget curl apt-utils
+apt-get -y install unzip wget curl
 
 rm -rf /var/lib/apt/lists/*
 rm -f /var/log/dpkg.log
