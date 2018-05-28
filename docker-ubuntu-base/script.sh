@@ -4,7 +4,7 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-echo "deb http://archive.ubuntu.com/ubuntu xenial multiverse" >> /etc/apt/sources.list
+echo "deb http://archive.ubuntu.com/ubuntu bionic multiverse" >> /etc/apt/sources.list
 apt-get update -y
 locale-gen "en_US.UTF-8"
 dpkg-reconfigure locales
