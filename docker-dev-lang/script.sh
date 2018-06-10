@@ -5,7 +5,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # apt-get -y install python-setuptools
 # add-apt-repository -y ppa:chris-lea/node.js
-curl -sL https://deb.nodesource.com/setup_9.x | bash -
+curl -sL https://deb.nodesource.com/setup_10.x | bash -
 add-apt-repository -y ppa:kivy-team/kivy
 apt-get -y update
 apt-get -y install make autoconf
