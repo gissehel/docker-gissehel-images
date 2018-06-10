@@ -1,0 +1,14 @@
+build:
+    image: "docker:stable"
+    services:
+        - "docker:dind"
+    stage: "build"
+    script:
+        - "docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} registry.gitlab.com"
+        - "docker build -t registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:latest docker-ubuntu-sshd/"
+        - "docker tag registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:latest registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:1.10-test"
+        - "docker push registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:latest"
+        - "docker push registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:1.10-test"
+
+
+
