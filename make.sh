@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="1.10"
+. "version.sh"
 badgesfilenames="badges.md"
 gitlabci_filename=".gitlab-ci.yml"
 gitlabci_base_filename=".gitlab-ci-base.yml"
