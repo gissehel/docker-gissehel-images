@@ -88,10 +88,10 @@ add_badge() {
 add_gitlabci() {
     id="$1"
 
-    echo "        - \"docker build -t registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:latest dockerfiles/gitlab/${id}/\"" >> "${gitlabci_filename}"
-    echo "        - \"docker tag registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:latest registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
-    echo "        - \"docker push registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:latest\"" >> "${gitlabci_filename}"
-    echo "        - \"docker push registry.gitlab.com/gissehel/docker-gissehel-images/ubuntu-sshd:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
+    echo "        - \"docker build -t registry.gitlab.com/gissehel/docker-gissehel-images/${id}:latest dockerfiles/gitlab/${id}/\"" >> "${gitlabci_filename}"
+    echo "        - \"docker tag registry.gitlab.com/gissehel/docker-gissehel-images/${id}:latest registry.gitlab.com/gissehel/docker-gissehel-images/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
+    echo "        - \"docker push registry.gitlab.com/gissehel/docker-gissehel-images/${id}:latest\"" >> "${gitlabci_filename}"
+    echo "        - \"docker push registry.gitlab.com/gissehel/docker-gissehel-images/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
 
 
 }
