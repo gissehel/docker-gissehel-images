@@ -29,6 +29,9 @@ npm install -g yamljs
 npm install -g yarn
 npm install -g meteor
 npm install -g @pingy/cli
+npm install -g pug-cli
+npm install -g uglify-js
+npm install -g stylus
 
 rm -rf /var/lib/apt/lists/*
 rm -f /var/log/dpkg.log
