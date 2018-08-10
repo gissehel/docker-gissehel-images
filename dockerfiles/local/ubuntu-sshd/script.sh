@@ -3,7 +3,7 @@
 #:! /bin/bash
 export DEBIAN_FRONTEND=noninteractive
 
-echo "deb http://archive.ubuntu.com/ubuntu xenial multiverse" >> /etc/apt/sources.list
+# echo "deb http://archive.ubuntu.com/ubuntu xenial multiverse" >> /etc/apt/sources.list
 sed -i '/docker_env/d' /etc/group
 
 # Enabling SSH (since 0.9.16)
