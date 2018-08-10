@@ -8,7 +8,7 @@ LABEL \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.name=ubuntu-base \
-      org.label-schema.version=1.14-$VCS_REF \
+      org.label-schema.version=1.15-$VCS_REF \
       org.label-schema.vendor=gissehel \
       org.label-schema.vcs-url="https://github.com/gissehel/docker-gissehel-images" \
       org.label-schema.schema-version="1.0"

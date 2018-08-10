@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get -y update
 apt-get -y install mercurial git subversion mc vim screen command-not-found man python-software-properties colordiff
 apt-get -y install pandoc bash-completion apt-file netcat-openbsd
-apt-get -y install net-tools nmap inetutils-ping bind9-host
+apt-get -y install net-tools nmap inetutils-ping bind9-host jq
 
 apt-file update
 rm -f /etc/apt/apt.conf.d/docker-clean

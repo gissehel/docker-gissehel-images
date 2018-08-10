@@ -5,7 +5,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get -y update
 apt-get -y install make
-apt-get -y install unrar unzip par2
+apt-get -y install unrar unzip par2 mplayer
 
 LOGIN=gissehel
 GROUP=$LOGIN
@@ -24,7 +24,6 @@ echo "curl http://monip.org" >> "${BASH_HISTORY}"
 echo "monip" >> "${BASH_HISTORY}"
 chown gissehel:gissehel "${BASH_HISTORY}"
 chmod 0644 "${BASH_HISTORY}"
-
 
 curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
