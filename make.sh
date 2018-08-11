@@ -7,6 +7,11 @@ gitlabci_base_filename=".gitlab-ci-base.yml"
 makefile_base_filename="Makefile-local-base"
 USE_BADGES=1
 
+github_project="gissehel/docker-gissehel-images"
+gitlab_project="registry.gitlab.com/gissehel/docker-gissehel-images"
+dockerhub_prefix="gissehel"
+vendor="gissehel"
+
 create_dockerfile() {
     filename="$1"
     dockerfilename="$2"
@@ -14,8 +19,8 @@ create_dockerfile() {
     flavor="$4"
     image_prefix=""
 
-    [ "${flavor}" == "github" ] && image_prefix="gissehel\\/"
-    [ "${flavor}" == "gitlab" ] && image_prefix="registry.gitlab.com\\/gissehel\\/docker-gissehel-images\\/"
+    [ "${flavor}" == "github" ] && image_prefix="${dockerhub_prefix}\\/"
+    [ "${flavor}" == "gitlab" ] && image_prefix=$(echo "${gitlab_project}/" | sed -e 's|\/|\\/|g;')
     [ "${flavor}" == "local" ] && image_prefix="local-"
     cat "${filename}" | grep '^#:D ' | sed -e 's/^#:D //' | sed -e "s/{id}/${id}/g; s/{image_prefix}/${image_prefix}/g; s/{flavor}/${flavor}/g" > "${dockerfilename}"
     shell="$(cat "${filename}" | grep '^#:! ' | sed -e 's/^#:! //' | sed -e "s/{id}/${id}/g; s/{flavor}/${flavor}/g")"
@@ -28,8 +33,8 @@ create_dockerfile() {
     echo "      org.label-schema.vcs-ref=\$VCS_REF \\" >> "${dockerfilename}"
     echo "      org.label-schema.name=${id} \\" >> "${dockerfilename}"
     echo "      org.label-schema.version=${VERSION}-\$VCS_REF \\" >> "${dockerfilename}"
-    echo "      org.label-schema.vendor=gissehel \\" >> "${dockerfilename}"
-    echo '      org.label-schema.vcs-url="https://github.com/gissehel/docker-gissehel-images" '"\\" >> "${dockerfilename}"
+    echo "      org.label-schema.vendor=${vendor} \\" >> "${dockerfilename}"
+    echo '      org.label-schema.vcs-url="https://github.com/'"${github_project}"'" '"\\" >> "${dockerfilename}"
     echo '      org.label-schema.schema-version="1.0"' >> "${dockerfilename}"
     echo "" >> "${dockerfilename}"
     echo "ADD ${filename} /tmp/create-image-script" >> "${dockerfilename}"
@@ -111,6 +116,7 @@ init_gitlabci() {
 }
 
 init_makefile() {
+    mkdir -p "dockerfiles/local"
     cat "${makefile_base_filename}" > "dockerfiles/local/Makefile"
 }
 
@@ -118,10 +124,10 @@ add_badge() {
     id="$1"
 
     echo -n "" >> "${badgesfilenames}"
-    echo -n " [![](https://images.microbadger.com/badges/image/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own image badge on microbadger.com\")" >> "${badgesfilenames}"
-    echo -n " [![](https://images.microbadger.com/badges/version/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own version badge on microbadger.com\")" >> "${badgesfilenames}"
-    echo -n " [![](https://images.microbadger.com/badges/commit/gissehel/${id}.svg)](https://microbadger.com/images/gissehel/${id} \"Get your own commit badge on microbadger.com\")" >> "${badgesfilenames}"
-    echo -n " [gissehel/${id}](https://hub.docker.com/r/gissehel/${id})" >> "${badgesfilenames}"
+    echo -n " [![](https://images.microbadger.com/badges/image/${dockerhub_prefix}/${id}.svg)](https://microbadger.com/images/${dockerhub_prefix}/${id} \"Get your own image badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo -n " [![](https://images.microbadger.com/badges/version/${dockerhub_prefix}/${id}.svg)](https://microbadger.com/images/${dockerhub_prefix}/${id} \"Get your own version badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo -n " [![](https://images.microbadger.com/badges/commit/${dockerhub_prefix}/${id}.svg)](https://microbadger.com/images/${dockerhub_prefix}/${id} \"Get your own commit badge on microbadger.com\")" >> "${badgesfilenames}"
+    echo -n " [${dockerhub_prefix}/${id}](https://hub.docker.com/r/${dockerhub_prefix}/${id})" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
     echo "" >> "${badgesfilenames}"
@@ -130,10 +136,10 @@ add_badge() {
 add_gitlabci() {
     id="$1"
 
-    echo "        - \"docker build -t registry.gitlab.com/gissehel/docker-gissehel-images/${id}:latest dockerfiles/gitlab/${id}/\"" >> "${gitlabci_filename}"
-    echo "        - \"docker tag registry.gitlab.com/gissehel/docker-gissehel-images/${id}:latest registry.gitlab.com/gissehel/docker-gissehel-images/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
-    echo "        - \"docker push registry.gitlab.com/gissehel/docker-gissehel-images/${id}:latest\"" >> "${gitlabci_filename}"
-    echo "        - \"docker push registry.gitlab.com/gissehel/docker-gissehel-images/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
+    echo "        - \"docker build -t ${gitlab_project}/${id}:latest dockerfiles/gitlab/${id}/\"" >> "${gitlabci_filename}"
+    echo "        - \"docker tag ${gitlab_project}/${id}:latest ${gitlab_project}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
+    echo "        - \"docker push ${gitlab_project}/${id}:latest\"" >> "${gitlabci_filename}"
+    echo "        - \"docker push ${gitlab_project}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
 }
 
 create_readme() {
@@ -208,6 +214,3 @@ else
     esac
 fi
 
-
-# cd docker-ubuntu-sshd
-# docker build --force-rm --no-cache --pull --tag gissehel/ubuntu-sshd .
