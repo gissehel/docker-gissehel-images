@@ -167,6 +167,26 @@ create_dockerfile_from_id() {
     add_gitlabci "${id}"
 }
 
+make_all() {
+    init_readme
+    init_gitlabci
+    init_makefile
+
+    for id in ${project_images}
+    do
+        create_dockerfile_from_id "${id}"
+    done
+}
+
+set_version() {
+    VERSION="$1"
+    echo "VERSION=\"${VERSION}\"" > "${docker_builder_data_dir}/version.sh"
+
+    make_all
+}
+
+
+
 name="$1"
 
 if [ -z "${name}" ]; then
@@ -185,6 +205,12 @@ else
         clean)
             rm -f "${gitlabci_filename}" "${readme_filename}"
             rm -rf "${dockerfiles_dir}"
+            ;;
+        set-version)
+            set_version "$2"
+            ;;
+        version)
+            echo "Current version : [${VERSION}]"
             ;;
         *)
             echo "Don't understand [${name}]"
