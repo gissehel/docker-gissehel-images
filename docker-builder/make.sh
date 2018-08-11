@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+
+project_path=$(dirname "$0")
+project_path=$(readlink -f "${project_path}")
+docker_builder_dir="${project_path}/docker-builder"
+docker_builder_data_dir="${project_path}/docker-builder-data"
+
+. "${docker_builder_data_dir}/version.sh"
+. "${docker_builder_data_dir}/data.sh"
+
+badgesfilenames="${project_path}/badges.md"
+gitlabci_filename="${project_path}/.gitlab-ci.yml"
+gitlabci_base_filename="${docker_builder_dir}/.gitlab-ci-base.yml"
+makefile_base_filename="${docker_builder_dir}/Makefile-local-base"
+readme_base_filename="${docker_builder_data_dir}/README-base.md"
+readme_filename="${project_path}/README.md"
+dockerfiles_relative_dir="dockerfiles"
+dockerfiles_dir="${project_path}/${dockerfiles_relative_dir}"
+makefile_filename="${dockerfiles_dir}/local/Makefile"
+src_dir="${project_path}/${src_dir}"
+
+create_dockerfile() {
+    filename="$1"
+    dockerfilename="$2"
+    id="$3"
+    flavor="$4"
+    image_prefix=""
+
+    [ "${flavor}" == "github" ] && image_prefix="${dockerhub_prefix}\\/"
+    [ "${flavor}" == "gitlab" ] && image_prefix=$(echo "${gitlab_project}/" | sed -e 's|\/|\\/|g;')
+    [ "${flavor}" == "local" ] && image_prefix="local-"
+    cat "${filename}" | grep '^#:D ' | sed -e 's/^#:D //' | sed -e "s/{id}/${id}/g; s/{image_prefix}/${image_prefix}/g; s/{flavor}/${flavor}/g" > "${dockerfilename}"
+    shell="$(cat "${filename}" | grep '^#:! ' | sed -e 's/^#:! //' | sed -e "s/{id}/${id}/g; s/{flavor}/${flavor}/g")"
+    echo "" >> "${dockerfilename}"
+    echo "ARG BUILD_DATE" >> "${dockerfilename}"
+    echo "ARG VCS_REF" >> "${dockerfilename}"
+    echo "" >> "${dockerfilename}"
+    echo "LABEL \\" >> "${dockerfilename}"
+    echo "      org.label-schema.build-date=\$BUILD_DATE \\" >> "${dockerfilename}"
+    echo "      org.label-schema.vcs-ref=\$VCS_REF \\" >> "${dockerfilename}"
+    echo "      org.label-schema.name=${id} \\" >> "${dockerfilename}"
+    echo "      org.label-schema.version=${VERSION}-\$VCS_REF \\" >> "${dockerfilename}"
+    echo "      org.label-schema.vendor=${vendor} \\" >> "${dockerfilename}"
+    echo '      org.label-schema.vcs-url="'"${project_url}"'" '"\\" >> "${dockerfilename}"
+    echo '      org.label-schema.schema-version="1.0"' >> "${dockerfilename}"
+    echo "" >> "${dockerfilename}"
+    echo "ADD ${filename} /tmp/create-image-script" >> "${dockerfilename}"
+    echo "RUN ${shell} /tmp/create-image-script && rm -f /tmp/create-image-script" >> "${dockerfilename}"
+    echo "" >> "${dockerfilename}"
+    cat "${filename}" | grep '^#:E ' | sed -e 's/^#:E //' | sed -e "s/{id}/${id}/g" >> "${dockerfilename}"
+
+
+}
+
+create_build_hook() {
+    dirname="hooks"
+    id="$1"
+    flavor="$2"
+
+    if [ "${flavor}" == "github" ]
+    then
+        mkdir -p "${dirname}"
+
+        filename="${dirname}/build"
+
+        echo '#!/bin/bash' > "${filename}"
+        echo '# $IMAGE_NAME var is injected into the build so the tag is correct.' >> "${filename}"
+        echo 'docker build --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` -t ${IMAGE_NAME} .' >> "${filename}"
+
+        filename="${dirname}/post_push"
+
+        echo "#!/bin/bash" > "${filename}"
+        echo "" >> "${filename}"
+        echo 'GIT_SHA_TAG='"${VERSION}"'-`git rev-parse --short HEAD`' >> "${filename}"
+        echo "docker tag \$IMAGE_NAME \$DOCKER_REPO:\$GIT_SHA_TAG" >> "${filename}"
+        echo "docker push \$DOCKER_REPO:\$GIT_SHA_TAG" >> "${filename}"
+    fi
+}
+
+create_makefile_parts() {
+    filename="$1"
+    id="$2"
+    flavor="$3"
+    if [ "${flavor}" == "local" ]
+    then
+        FROM_LINE=$(cat "${filename}" | grep '^#:D FROM ')
+        MAKEFILE_PART="${makefile_filename}"
+
+        echo ".PHONY:${id}" >> "${MAKEFILE_PART}"
+
+        if (echo "${FROM_LINE}" | grep '{image_prefix}' 2>&1 >/dev/null)
+        then
+            IS_FROM_LOCAL="1"
+            FROM_IMAGE=$(echo "${FROM_LINE}" | sed -e 's/.*{image_prefix}//; s/:latest//')
+            FROM_IMAGE_BASE_FILENAME="${FROM_IMAGE}"
+            FROM_IMAGE_FILENAME="${FROM_IMAGE_BASE_FILENAME}.local-image"
+        else
+            IS_FROM_LOCAL="0"
+            FROM_IMAGE=$(echo "${FROM_LINE}" | sed -e 's/.*FROM //;')
+            FROM_IMAGE_BASE_FILENAME=$(echo "${FROM_IMAGE}" | sed -e 's/\//-/; s/:/--/')
+            FROM_IMAGE_FILENAME="${FROM_IMAGE_BASE_FILENAME}.remote-image"
+        fi
+        echo "all:${id}" >> "${MAKEFILE_PART}"
+        echo "${id}:${id}.local-image" >> "${MAKEFILE_PART}"
+        echo "${id}.local-image: ${FROM_IMAGE_FILENAME}" >> "${MAKEFILE_PART}"
+        if [ "${IS_FROM_LOCAL}" == "0" ]
+        then
+            echo "" >> "${MAKEFILE_PART}"
+            echo "${FROM_IMAGE_FILENAME}:" >> "${MAKEFILE_PART}"
+            printf "\tdocker pull \"${FROM_IMAGE}\" && touch \"\$@\"\n" >> "${MAKEFILE_PART}"
+        fi
+        echo "" >> "${MAKEFILE_PART}"
+        
+    fi
+}
+
+init_readme() {
+    rm -f "${readme_filename}"
+    cp "${readme_base_filename}" "${readme_filename}"
+}
+
+init_gitlabci() {
+    cat "${gitlabci_base_filename}" > "${gitlabci_filename}"
+}
+
+init_makefile() {
+    mkdir -p "${dockerfiles_dir}/local"
+    cat "${makefile_base_filename}" > "${makefile_filename}"
+}
+
+add_badge() {
+    id="$1"
+
+    echo -n "" >> "${readme_filename}"
+    echo -n " [![](https://images.microbadger.com/badges/image/${dockerhub_prefix}/${id}.svg)](https://microbadger.com/images/${dockerhub_prefix}/${id} \"Get your own image badge on microbadger.com\")" >> "${readme_filename}"
+    echo -n " [![](https://images.microbadger.com/badges/version/${dockerhub_prefix}/${id}.svg)](https://microbadger.com/images/${dockerhub_prefix}/${id} \"Get your own version badge on microbadger.com\")" >> "${readme_filename}"
+    echo -n " [![](https://images.microbadger.com/badges/commit/${dockerhub_prefix}/${id}.svg)](https://microbadger.com/images/${dockerhub_prefix}/${id} \"Get your own commit badge on microbadger.com\")" >> "${readme_filename}"
+    echo -n " [${dockerhub_prefix}/${id}](https://hub.docker.com/r/${dockerhub_prefix}/${id})" >> "${readme_filename}"
+    echo "" >> "${readme_filename}"
+    echo "" >> "${readme_filename}"
+    echo "" >> "${readme_filename}"
+}
+
+add_gitlabci() {
+    id="$1"
+
+    echo "        - \"docker build -t ${gitlab_project}/${id}:latest ${dockerfiles_relative_dir}/gitlab/${id}/\"" >> "${gitlabci_filename}"
+    echo "        - \"docker tag ${gitlab_project}/${id}:latest ${gitlab_project}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
+    echo "        - \"docker push ${gitlab_project}/${id}:latest\"" >> "${gitlabci_filename}"
+    echo "        - \"docker push ${gitlab_project}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
+}
+
+create_dockerfile_from_id() {
+    id="$1"
+    add_badge "${id}"
+    for flavor in github gitlab local
+    do
+        pushd .>/dev/null
+        mkdir -p "${dockerfiles_dir}/${flavor}/${id}"
+        cp -f "${src_dir}/${id}.sh" "${dockerfiles_dir}/${flavor}/${id}/script.sh"
+        cd "${dockerfiles_dir}/${flavor}/${id}"
+        create_dockerfile "script.sh" "Dockerfile" "${id}" "${flavor}"
+        create_build_hook "${id}" "${flavor}"
+        create_makefile_parts "script.sh" "${id}" "${flavor}"
+        popd>/dev/null
+    done
+    add_gitlabci "${id}"
+}
+
+name="$1"
+
+if [ -z "${name}" ]; then
+
+    init_readme
+    init_gitlabci
+    init_makefile
+
+    for id in ${project_images}
+    do
+        create_dockerfile_from_id "${id}"
+    done
+else
+
+    case "${name}" in
+        clean)
+            rm -f "${gitlabci_filename}" "${readme_filename}"
+            rm -rf "${dockerfiles_dir}"
+            ;;
+        *)
+            echo "Don't understand [${name}]"
+    esac
+fi
+
