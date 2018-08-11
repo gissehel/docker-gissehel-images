@@ -4,6 +4,7 @@
 badgesfilenames="badges.md"
 gitlabci_filename=".gitlab-ci.yml"
 gitlabci_base_filename=".gitlab-ci-base.yml"
+makefile_base_filename="Makefile-local-base"
 USE_BADGES=1
 
 create_dockerfile() {
@@ -64,12 +65,53 @@ create_build_hook() {
     fi
 }
 
+create_makefile_parts() {
+    filename="$1"
+    id="$2"
+    flavor="$3"
+    if [ "${flavor}" == "local" ]
+    then
+        FROM_LINE=$(cat "${filename}" | grep '^#:D FROM ')
+        MAKEFILE_PART="../Makefile"
+
+        echo ".PHONY:${id}" >> "${MAKEFILE_PART}"
+
+        if (echo "${FROM_LINE}" | grep '{image_prefix}' 2>&1 >/dev/null)
+        then
+            IS_FROM_LOCAL="1"
+            FROM_IMAGE=$(echo "${FROM_LINE}" | sed -e 's/.*{image_prefix}//; s/:latest//')
+            FROM_IMAGE_BASE_FILENAME="${FROM_IMAGE}"
+            FROM_IMAGE_FILENAME="${FROM_IMAGE_BASE_FILENAME}.local-image"
+        else
+            IS_FROM_LOCAL="0"
+            FROM_IMAGE=$(echo "${FROM_LINE}" | sed -e 's/.*FROM //;')
+            FROM_IMAGE_BASE_FILENAME=$(echo "${FROM_IMAGE}" | sed -e 's/\//-/; s/:/--/')
+            FROM_IMAGE_FILENAME="${FROM_IMAGE_BASE_FILENAME}.remote-image"
+        fi
+        echo "all:${id}" >> "${MAKEFILE_PART}"
+        echo "${id}:${id}.local-image" >> "${MAKEFILE_PART}"
+        echo "${id}.local-image: ${FROM_IMAGE_FILENAME}" >> "${MAKEFILE_PART}"
+        if [ "${IS_FROM_LOCAL}" == "0" ]
+        then
+            echo "" >> "${MAKEFILE_PART}"
+            echo "${FROM_IMAGE_FILENAME}:" >> "${MAKEFILE_PART}"
+            printf "\tdocker pull \"${FROM_IMAGE}\" && touch \"\$@\"\n" >> "${MAKEFILE_PART}"
+        fi
+        echo "" >> "${MAKEFILE_PART}"
+        
+    fi
+}
+
 init_badges() {
     echo "" > "${badgesfilenames}"
 }
 
 init_gitlabci() {
     cat "${gitlabci_base_filename}" > "${gitlabci_filename}"
+}
+
+init_makefile() {
+    cat "${makefile_base_filename}" > "dockerfiles/local/Makefile"
 }
 
 add_badge() {
@@ -92,8 +134,6 @@ add_gitlabci() {
     echo "        - \"docker tag registry.gitlab.com/gissehel/docker-gissehel-images/${id}:latest registry.gitlab.com/gissehel/docker-gissehel-images/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
     echo "        - \"docker push registry.gitlab.com/gissehel/docker-gissehel-images/${id}:latest\"" >> "${gitlabci_filename}"
     echo "        - \"docker push registry.gitlab.com/gissehel/docker-gissehel-images/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
-
-
 }
 
 create_readme() {
@@ -126,6 +166,7 @@ create_dockerfile_from_id() {
         cd "dockerfiles/${flavor}/${id}"
         create_dockerfile "script.sh" "Dockerfile" "${id}" "${flavor}"
         create_build_hook "${id}" "${flavor}"
+        create_makefile_parts "script.sh" "${id}" "${flavor}"
         popd>/dev/null
     done
     add_gitlabci "${id}"
@@ -137,6 +178,7 @@ if [ -z "${name}" ]; then
 
     init_badges
     init_gitlabci
+    init_makefile
 
     create_dockerfile_from_id "ubuntu-sshd"
     create_dockerfile_from_id "dev"

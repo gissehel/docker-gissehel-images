@@ -5,7 +5,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get -y update
 apt-get -y install make
-apt-get -y install unrar unzip par2 mplayer ffmpeg hanbrake-cli
+apt-get -y install unrar unzip par2 mplayer ffmpeg handbrake-cli
 
 LOGIN=gissehel
 GROUP=$LOGIN
