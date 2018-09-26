@@ -5,6 +5,15 @@ export DEBIAN_FRONTEND=noninteractive
 
 # apt-get -y install python-setuptools
 # add-apt-repository -y ppa:chris-lea/node.js
+wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+apt-get -y update
+apt-get -y install apt-transport-https
+rm -f packages-microsoft-prod.deb
+apt-get -y install dotnet-hosting-2.0.9
+apt-get -y install dotnet-sdk-2.1.202
+apt-get -y install dotnet-sdk-2.1
+apt-get -y install aspnetcore-runtime-2.1
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
 add-apt-repository -y ppa:kivy-team/kivy
 apt-get -y update
