@@ -4,6 +4,7 @@ project_path=$(dirname "$0")
 project_path=$(readlink -f "${project_path}")
 docker_builder_dir="${project_path}/docker-builder"
 docker_builder_data_dir="${project_path}/docker-builder-data"
+gitlab_project_var="\${CI_REGISTRY_IMAGE}"
 
 . "${docker_builder_data_dir}/version.sh"
 . "${docker_builder_data_dir}/data.sh"
@@ -144,10 +145,10 @@ add_badge() {
 add_gitlabci() {
     id="$1"
 
-    echo "        - \"docker build -t ${gitlab_project}/${id}:latest ${dockerfiles_relative_dir}/gitlab/${id}/\"" >> "${gitlabci_filename}"
-    echo "        - \"docker tag ${gitlab_project}/${id}:latest ${gitlab_project}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
-    echo "        - \"docker push ${gitlab_project}/${id}:latest\"" >> "${gitlabci_filename}"
-    echo "        - \"docker push ${gitlab_project}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
+    echo "        - \"docker build -t ${gitlab_project_var}/${id}:latest ${dockerfiles_relative_dir}/gitlab/${id}/\"" >> "${gitlabci_filename}"
+    echo "        - \"docker tag ${gitlab_project_var}/${id}:latest ${gitlab_project_var}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
+    echo "        - \"docker push ${gitlab_project_var}/${id}:latest\"" >> "${gitlabci_filename}"
+    echo "        - \"docker push ${gitlab_project_var}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
 }
 
 create_dockerfile_from_id() {

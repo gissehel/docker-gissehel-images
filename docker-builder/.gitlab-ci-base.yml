@@ -4,4 +4,4 @@ build:
         - "docker:dind"
     stage: "build"
     script:
-        - "docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} registry.gitlab.com"
+        - "docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}"
