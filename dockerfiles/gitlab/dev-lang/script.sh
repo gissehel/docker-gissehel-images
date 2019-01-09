@@ -7,6 +7,8 @@ export DEBIAN_FRONTEND=noninteractive
 # add-apt-repository -y ppa:chris-lea/node.js
 wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 apt-get -y update
 apt-get -y install apt-transport-https
 rm -f packages-microsoft-prod.deb
@@ -28,7 +30,7 @@ apt-get -y install cmdtest
 apt-get -y install unrar
 pip install --upgrade beautifulsoup4 html5lib requests_toolbelt requests PyYAML ndg_httpsclient
 pip install --upgrade pymongo django
-apt-get -y install nodejs
+apt-get -y install nodejs yarn
 npm install -g coffee-script
 npm install -g brunch
 npm install -g mimosa
