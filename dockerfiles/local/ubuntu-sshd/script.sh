@@ -1,4 +1,4 @@
-#:D FROM phusion/baseimage:latest
+#:D FROM phusion/baseimage:master
 #:D MAINTAINER Gissehel <public-docker-{flavor}-{id}-maintainer@gissehel.org>
 #:! /bin/bash
 export DEBIAN_FRONTEND=noninteractive

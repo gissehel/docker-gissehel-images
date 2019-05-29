@@ -16,10 +16,10 @@ clean:
 .PHONY:ubuntu-sshd
 all:ubuntu-sshd
 ubuntu-sshd:ubuntu-sshd.local-image
-ubuntu-sshd.local-image: phusion-baseimage--latest.remote-image
+ubuntu-sshd.local-image: phusion-baseimage--master.remote-image
 
-phusion-baseimage--latest.remote-image:
-	docker pull "phusion/baseimage:latest" && touch "$@"
+phusion-baseimage--master.remote-image:
+	docker pull "phusion/baseimage:master" && touch "$@"
 
 .PHONY:dev
 all:dev
