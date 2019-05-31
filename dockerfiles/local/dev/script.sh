@@ -4,9 +4,10 @@
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get -y update
-apt-get -y install mercurial git subversion mc vim screen command-not-found man python-software-properties colordiff vim
+apt-get -y install mercurial git subversion mc vim screen command-not-found man colordiff
 apt-get -y install pandoc bash-completion apt-file netcat-openbsd
 apt-get -y install net-tools nmap inetutils-ping bind9-host jq mcrypt
+apt-get -y install p7zip-full tmux tmuxinator gdebi-core 
 
 apt-file update
 rm -f /etc/apt/apt.conf.d/docker-clean
@@ -31,7 +32,7 @@ mkdir /home/$LOGIN/.ssh
 chown $LOGIN:$LOGIN /home/$LOGIN/.ssh
 chmod 0770 /home/$LOGIN/.ssh
 
-sudo -i -u $LOGIN bash -c "mkdir -p etc; git clone https://github.com/gissehel/dotfiler ~/.dotfiles; git clone https://github.com/gissehel/dot-gissehel ~/.dotfiles/dot-gissehel; git clone https://github.com/gissehel/dot-meta ~/.dotfiles/dot-meta; git clone https://github.com/VundleVim/Vundle.vim.git ~/.dotfiles/vundle/.vim/bundle/Vundle.vim; ~/.dotfiles/bin/dot update --skip-pull; vim +PluginInstall +qall"
+sudo -i -u $LOGIN bash -c "mkdir -p etc; git clone https://github.com/gissehel/dotfiler ~/.dotfiles; git clone https://github.com/gissehel/dot-gissehel ~/.dotfiles/dot-gissehel; git clone https://github.com/gissehel/dot-meta ~/.dotfiles/dot-meta; git clone https://github.com/VundleVim/Vundle.vim.git ~/.dotfiles/vundle/.vim/bundle/Vundle.vim; ~/.dotfiles/bin/dot update --skip-pull; echo '' | vim -T vt100 --not-a-term +PluginInstall +qall"
 
 rm -rf /var/lib/apt/lists/*
 rm -f /var/log/dpkg.log
