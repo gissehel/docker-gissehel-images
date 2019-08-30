@@ -18,8 +18,8 @@ chown irssi:irssi /home/irssi/download
 chown irssi:irssi /home/irssi/irclogs
 chown irssi:irssi /home/irssi/.bash_history
 chmod 0770 /home/irssi/.ssh
-chmod 0775 /var/run/screen
 chmod 0644 /home/irssi/.bash_history
+chmod 0777 /var/run/screen
 
 cat <<__END__ > "$STARTIRSSI"
 #!/usr/bin/env bash
