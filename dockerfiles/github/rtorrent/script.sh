@@ -29,7 +29,6 @@ chown user:user /home/user/torrent/torrent_active
 chown user:user /home/user/torrent/finished
 chown user:user /home/user/.bash_history
 chmod 0770 /home/user/.ssh
-chmod 0777 /var/run/screen
 chmod 0644 /home/user/.bash_history
 
 cat <<__END__ > "$STARTSCRIPT"
@@ -51,7 +50,7 @@ chown user:user /home/user/.bash_history
 chown user:user /home/user/.rtorrent.rc
 
 chmod 0770 /home/user/.ssh
-chmod 0775 /var/run/screen
+chmod 0777 /var/run/screen
 chmod 0644 /home/user/.bash_history
 chmod 0644 /home/user/.rtorrent.rc
 
