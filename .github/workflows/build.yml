@@ -22,104 +22,113 @@ jobs:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-          - name: 'Build image ubuntu-sshd'
+          - name: 'Build image ubuntu-sshd ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
                 context: dockerfiles/ghcr/ubuntu-sshd/
-                # repository: ${{ secrets.CR_USER }}/ubuntu-sshd
+                file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
                 push: true
                 tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:latest
-          - name: 'Build image dev ${GITHUB_SHA_SHORT}'
+          - name: 'Build image dev ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/dev
-                repository: ${{ secrets.CR_USER }}/dev
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image dev-lang ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/dev/
+                file: dockerfiles/ghcr/dev/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/dev:latest
+          - name: 'Build image dev-lang ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/dev-lang
-                repository: ${{ secrets.CR_USER }}/dev-lang
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image dev-lang-java ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/dev-lang/
+                file: dockerfiles/ghcr/dev-lang/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang:latest
+          - name: 'Build image dev-lang-java ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/dev-lang-java
-                repository: ${{ secrets.CR_USER }}/dev-lang-java
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image dev-dl ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/dev-lang-java/
+                file: dockerfiles/ghcr/dev-lang-java/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:latest
+          - name: 'Build image dev-dl ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/dev-dl
-                repository: ${{ secrets.CR_USER }}/dev-dl
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image irssi ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/dev-dl/
+                file: dockerfiles/ghcr/dev-dl/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/dev-dl:latest
+          - name: 'Build image irssi ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/irssi
-                repository: ${{ secrets.CR_USER }}/irssi
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image rtorrent ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/irssi/
+                file: dockerfiles/ghcr/irssi/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/irssi:latest
+          - name: 'Build image rtorrent ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/rtorrent
-                repository: ${{ secrets.CR_USER }}/rtorrent
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image ubuntu-base ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/rtorrent/
+                file: dockerfiles/ghcr/rtorrent/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/rtorrent:latest
+          - name: 'Build image ubuntu-base ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/ubuntu-base
-                repository: ${{ secrets.CR_USER }}/ubuntu-base
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image squid ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/ubuntu-base/
+                file: dockerfiles/ghcr/ubuntu-base/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:latest
+          - name: 'Build image squid ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/squid
-                repository: ${{ secrets.CR_USER }}/squid
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image squid-open ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/squid/
+                file: dockerfiles/ghcr/squid/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/squid:latest
+          - name: 'Build image squid-open ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/squid-open
-                repository: ${{ secrets.CR_USER }}/squid-open
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
-          - name: 'Build image gollum ${GITHUB_SHA_SHORT}'
+                context: dockerfiles/ghcr/squid-open/
+                file: dockerfiles/ghcr/squid-open/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/squid-open:latest
+          - name: 'Build image gollum ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/gollum
-                repository: ${{ secrets.CR_USER }}/gollum
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
+                context: dockerfiles/ghcr/gollum/
+                file: dockerfiles/ghcr/gollum/Dockerfile
+                push: true
+                tags: ghcr.io/${{ secrets.CR_USER }}/gollum:latest
