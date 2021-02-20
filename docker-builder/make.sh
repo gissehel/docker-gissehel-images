@@ -168,6 +168,7 @@ add_ghcr_action() {
     echo "            uses: docker/build-push-action@v1" >> "${ghcr_action_filename}"
     echo "            with:" >> "${ghcr_action_filename}"
     echo "                registry: ghcr.io" >> "${ghcr_action_filename}"
+    echo "                context: ${dockerfiles_relative_dir}/ghcr/${id}" >> "${ghcr_action_filename}"
     echo "                repository: \${{ secrets.CR_USER }}/${id}" >> "${ghcr_action_filename}"
     echo "                tags: latest" >> "${ghcr_action_filename}"
 }

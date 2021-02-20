@@ -23,65 +23,76 @@ jobs:
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/ubuntu-sshd
                 repository: ${{ secrets.CR_USER }}/ubuntu-sshd
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/dev
                 repository: ${{ secrets.CR_USER }}/dev
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/dev-lang
                 repository: ${{ secrets.CR_USER }}/dev-lang
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/dev-lang-java
                 repository: ${{ secrets.CR_USER }}/dev-lang-java
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/dev-dl
                 repository: ${{ secrets.CR_USER }}/dev-dl
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/irssi
                 repository: ${{ secrets.CR_USER }}/irssi
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/rtorrent
                 repository: ${{ secrets.CR_USER }}/rtorrent
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/ubuntu-base
                 repository: ${{ secrets.CR_USER }}/ubuntu-base
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/squid
                 repository: ${{ secrets.CR_USER }}/squid
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/squid-open
                 repository: ${{ secrets.CR_USER }}/squid-open
                 tags: latest
           - name: 'Build:dockerimage'
             uses: docker/build-push-action@v1
             with:
                 registry: ghcr.io
+                context: dockerfiles/ghcr/gollum
                 repository: ${{ secrets.CR_USER }}/gollum
                 tags: latest
