@@ -5,6 +5,6 @@ ghcr_prefix="ghcr.io\/gissehel"
 project_url="https://github.com/${github_project}"
 vendor="gissehel"
 src_dir="src"
-project_images="ubuntu-sshd dev dev-lang dev-lang-java dev-dl irssi rtorrent ubuntu-base squid squid-open gollum"
+project_images="ubuntu-sshd dev dev-lang dev-lang-java dev-dl irssi ubuntu-base squid squid-open"
 
 
