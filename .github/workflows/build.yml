@@ -35,7 +35,7 @@ jobs:
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
                 file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
-                context: .
+                context: dockerfiles/ghcr/ubuntu-sshd/
                 repository: ${{ secrets.CR_USER }}/ubuntu-sshd
                 push: true
                 tags: latest
