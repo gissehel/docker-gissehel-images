@@ -172,7 +172,7 @@ add_ghcr_action() {
     echo "                password: \${{ secrets.CR_PAT }}" >> "${ghcr_action_filename}"
     echo "                path: ${dockerfiles_relative_dir}/ghcr/${id}" >> "${ghcr_action_filename}"
     echo "                repository: \${{ secrets.CR_USER }}/${id}" >> "${ghcr_action_filename}"
-    echo "                tags: [ 'latest', '${VERSION}-\${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]" >> "${ghcr_action_filename}"
+    echo "                tags: latest, ${VERSION}-\${{ steps.vars.outputs.GITHUB_SHA_SHORT }}" >> "${ghcr_action_filename}"
 }
 
 create_dockerfile_from_id() {
