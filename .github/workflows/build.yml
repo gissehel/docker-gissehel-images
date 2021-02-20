@@ -1,0 +1,87 @@
+name: 'build'
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+
+jobs:
+    build:
+        name: 'Build'
+        runs-on: ubuntu-latest
+        steps:
+          - name: "Build:checkout"
+            uses: actions/checkout@v2
+          - name: 'Login to github container registry'
+            uses: docker/login-action@v1
+            with:
+                registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/ubuntu-sshd
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/dev
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/dev-lang
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/dev-lang-java
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/dev-dl
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/irssi
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/rtorrent
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/ubuntu-base
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/squid
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/squid-open
+                tags: latest
+          - name: 'Build:dockerimage'
+            uses: docker/build-push-action@v1
+            with:
+                registry: ghcr.io
+                repository: ${{ secrets.CR_USER }}/gollum
+                tags: latest

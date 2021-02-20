@@ -9,10 +9,14 @@ gitlab_project_var="\${CI_REGISTRY_IMAGE}"
 . "${docker_builder_data_dir}/version.sh"
 . "${docker_builder_data_dir}/data.sh"
 
+github_action_dir=".github/workflows"
+
 badgesfilenames="${project_path}/badges.md"
 gitlabci_filename="${project_path}/.gitlab-ci.yml"
+ghcr_action_filename="${project_path}/${github_action_dir}/build.yml"
 gitlabci_base_filename="${docker_builder_dir}/.gitlab-ci-base.yml"
 makefile_base_filename="${docker_builder_dir}/Makefile-local-base"
+ghcr_action_base_filename="${docker_builder_dir}/ghcr-base.yml"
 readme_base_filename="${docker_builder_data_dir}/README-base.md"
 readme_filename="${project_path}/README.md"
 dockerfiles_relative_dir="dockerfiles"
@@ -27,6 +31,7 @@ create_dockerfile() {
     flavor="$4"
     image_prefix=""
 
+    [ "${flavor}" == "ghcr" ] && image_prefix="${ghcr_prefix}\\/"
     [ "${flavor}" == "github" ] && image_prefix="${dockerhub_prefix}\\/"
     [ "${flavor}" == "gitlab" ] && image_prefix=$(echo "${gitlab_project}/" | sed -e 's|\/|\\/|g;')
     [ "${flavor}" == "local" ] && image_prefix="local-"
@@ -129,6 +134,11 @@ init_makefile() {
     cat "${makefile_base_filename}" > "${makefile_filename}"
 }
 
+init_ghcr_action() {
+    mkdir -p $(dirname "${ghcr_action_filename}")
+    cat "${ghcr_action_base_filename}" > "${ghcr_action_filename}"
+}
+
 add_badge() {
     id="$1"
 
@@ -151,10 +161,21 @@ add_gitlabci() {
     echo "        - \"docker push ${gitlab_project_var}/${id}:${VERSION}-\${CI_COMMIT_SHA:0:8}\"" >> "${gitlabci_filename}"
 }
 
+add_ghcr_action() {
+    id="$1"
+
+    echo "          - name: 'Build:dockerimage'" >> "${ghcr_action_filename}"
+    echo "            uses: docker/build-push-action@v1" >> "${ghcr_action_filename}"
+    echo "            with:" >> "${ghcr_action_filename}"
+    echo "                registry: ghcr.io" >> "${ghcr_action_filename}"
+    echo "                repository: \${{ secrets.CR_USER }}/${id}" >> "${ghcr_action_filename}"
+    echo "                tags: latest" >> "${ghcr_action_filename}"
+}
+
 create_dockerfile_from_id() {
     id="$1"
     add_badge "${id}"
-    for flavor in github gitlab local
+    for flavor in github gitlab ghcr local
     do
         pushd .>/dev/null
         mkdir -p "${dockerfiles_dir}/${flavor}/${id}"
@@ -166,12 +187,14 @@ create_dockerfile_from_id() {
         popd>/dev/null
     done
     add_gitlabci "${id}"
+    add_ghcr_action "${id}"
 }
 
 make_all() {
     init_readme
     init_gitlabci
     init_makefile
+    init_ghcr_action
 
     for id in ${project_images}
     do
@@ -191,20 +214,12 @@ set_version() {
 name="$1"
 
 if [ -z "${name}" ]; then
-
-    init_readme
-    init_gitlabci
-    init_makefile
-
-    for id in ${project_images}
-    do
-        create_dockerfile_from_id "${id}"
-    done
+    make_all
 else
 
     case "${name}" in
         clean)
-            rm -f "${gitlabci_filename}" "${readme_filename}"
+            rm -f "${gitlabci_filename}" "${readme_filename}" "${ghcr_action_filename}"
             rm -rf "${dockerfiles_dir}"
             ;;
         set-version)
