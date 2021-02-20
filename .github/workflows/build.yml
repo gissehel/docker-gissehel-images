@@ -21,7 +21,7 @@ jobs:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-          - name: 'Build image ubuntu-sshd ${GITHUB_SHA_SHORT}'
+          - name: 'Build image ubuntu-sshd'
             uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
@@ -29,7 +29,7 @@ jobs:
                 password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/ubuntu-sshd
                 repository: ${{ secrets.CR_USER }}/ubuntu-sshd
-                tags: latest, 1.21-${GITHUB_SHA_SHORT}
+                tags: latest
           - name: 'Build image dev ${GITHUB_SHA_SHORT}'
             uses: docker/build-push-action@v2
             with:
