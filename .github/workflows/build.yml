@@ -36,9 +36,9 @@ jobs:
                 password: ${{ secrets.CR_PAT }}
                 file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
                 context: dockerfiles/ghcr/ubuntu-sshd/
-                repository: ${{ secrets.CR_USER }}/ubuntu-sshd
+                # repository: ${{ secrets.CR_USER }}/ubuntu-sshd
                 push: true
-                tags: latest
+                tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:latest
           - name: 'Build image dev ${GITHUB_SHA_SHORT}'
             uses: docker/build-push-action@v2
             with:
