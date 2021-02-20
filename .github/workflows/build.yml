@@ -22,13 +22,80 @@ jobs:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
+          - name: 'Build image ubuntu-sshd ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/ubuntu-sshd/
+                file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:latest,ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:1.21,ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image dev ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/dev/
+                file: dockerfiles/ghcr/dev/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/dev:latest,ghcr.io/${{ secrets.CR_USER }}/dev:1.21,ghcr.io/${{ secrets.CR_USER }}/dev:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image dev-lang ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/dev-lang/
+                file: dockerfiles/ghcr/dev-lang/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang:latest,ghcr.io/${{ secrets.CR_USER }}/dev-lang:1.21,ghcr.io/${{ secrets.CR_USER }}/dev-lang:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-lang:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image dev-lang-java ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/dev-lang-java/
+                file: dockerfiles/ghcr/dev-lang-java/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:latest,ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:1.21,ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image dev-dl ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/dev-dl/
+                file: dockerfiles/ghcr/dev-dl/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/dev-dl:latest,ghcr.io/${{ secrets.CR_USER }}/dev-dl:1.21,ghcr.io/${{ secrets.CR_USER }}/dev-dl:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-dl:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image irssi ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/irssi/
+                file: dockerfiles/ghcr/irssi/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/irssi:latest,ghcr.io/${{ secrets.CR_USER }}/irssi:1.21,ghcr.io/${{ secrets.CR_USER }}/irssi:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/irssi:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image rtorrent ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/rtorrent/
+                file: dockerfiles/ghcr/rtorrent/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/rtorrent:latest,ghcr.io/${{ secrets.CR_USER }}/rtorrent:1.21,ghcr.io/${{ secrets.CR_USER }}/rtorrent:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/rtorrent:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image ubuntu-base ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/ubuntu-base/
+                file: dockerfiles/ghcr/ubuntu-base/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:latest,ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:1.21,ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image squid ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/squid/
+                file: dockerfiles/ghcr/squid/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/squid:latest,ghcr.io/${{ secrets.CR_USER }}/squid:1.21,ghcr.io/${{ secrets.CR_USER }}/squid:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/squid:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
+          - name: 'Build image squid-open ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/squid-open/
+                file: dockerfiles/ghcr/squid-open/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/squid-open:latest,ghcr.io/${{ secrets.CR_USER }}/squid-open:1.21,ghcr.io/${{ secrets.CR_USER }}/squid-open:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/squid-open:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
           - name: 'Build image gollum ${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
-                registry: ghcr.io
-                username: ${{ secrets.CR_USER }}
-                password: ${{ secrets.CR_PAT }}
                 context: dockerfiles/ghcr/gollum/
                 file: dockerfiles/ghcr/gollum/Dockerfile
-                push: true
-                tags: ghcr.io/${{ secrets.CR_USER }}/gollum:latest
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/gollum:latest,ghcr.io/${{ secrets.CR_USER }}/gollum:1.21,ghcr.io/${{ secrets.CR_USER }}/gollum:1.21-${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/gollum:${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}
