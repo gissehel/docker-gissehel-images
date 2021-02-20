@@ -164,7 +164,7 @@ add_gitlabci() {
 add_ghcr_action() {
     id="$1"
 
-    echo "          - name: 'Build image ${id} \${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'" >> "${ghcr_action_filename}"
+    echo "          - name: 'Build image ${id} \${GITHUB_SHA_SHORT}'" >> "${ghcr_action_filename}"
     echo "            uses: docker/build-push-action@v2" >> "${ghcr_action_filename}"
     echo "            with:" >> "${ghcr_action_filename}"
     echo "                registry: ghcr.io" >> "${ghcr_action_filename}"
@@ -172,7 +172,7 @@ add_ghcr_action() {
     echo "                password: \${{ secrets.CR_PAT }}" >> "${ghcr_action_filename}"
     echo "                path: ${dockerfiles_relative_dir}/ghcr/${id}" >> "${ghcr_action_filename}"
     echo "                repository: \${{ secrets.CR_USER }}/${id}" >> "${ghcr_action_filename}"
-    echo "                tags: latest, ${VERSION}-\${{ steps.vars.outputs.GITHUB_SHA_SHORT }}" >> "${ghcr_action_filename}"
+    echo "                tags: latest, ${VERSION}-\${GITHUB_SHA_SHORT}" >> "${ghcr_action_filename}"
 }
 
 create_dockerfile_from_id() {
