@@ -46,11 +46,6 @@ all:irssi
 irssi:irssi.local-image
 irssi.local-image: ubuntu-sshd.local-image
 
-.PHONY:rtorrent
-all:rtorrent
-rtorrent:rtorrent.local-image
-rtorrent.local-image: ubuntu-sshd.local-image
-
 .PHONY:ubuntu-base
 all:ubuntu-base
 ubuntu-base:ubuntu-base.local-image
@@ -68,9 +63,4 @@ squid.local-image: ubuntu-base.local-image
 all:squid-open
 squid-open:squid-open.local-image
 squid-open.local-image: ubuntu-base.local-image
-
-.PHONY:gollum
-all:gollum
-gollum:gollum.local-image
-gollum.local-image: ubuntu-base.local-image
 
