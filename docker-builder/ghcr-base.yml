@@ -13,6 +13,8 @@ jobs:
         steps:
           - name: "Build:checkout"
             uses: actions/checkout@v2
+          - name: "Set GITHUB_SHA_SHORT env var"
+            run: echo "::set-output name=GITHUB_SHA::$(echo ${GITHUB_SHA} | cut -c1-8)"
           - name: 'Login to github container registry'
             uses: docker/login-action@v1
             with:

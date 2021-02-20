@@ -13,86 +13,110 @@ jobs:
         steps:
           - name: "Build:checkout"
             uses: actions/checkout@v2
+          - name: "Set GITHUB_SHA_SHORT env var"
+            run: echo "::set-output name=GITHUB_SHA::$(echo ${GITHUB_SHA} | cut -c1-8)"
           - name: 'Login to github container registry'
             uses: docker/login-action@v1
             with:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+          - name: 'Build image ubuntu-sshd ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/ubuntu-sshd
                 repository: ${{ secrets.CR_USER }}/ubuntu-sshd
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image dev ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/dev
                 repository: ${{ secrets.CR_USER }}/dev
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image dev-lang ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/dev-lang
                 repository: ${{ secrets.CR_USER }}/dev-lang
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image dev-lang-java ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/dev-lang-java
                 repository: ${{ secrets.CR_USER }}/dev-lang-java
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image dev-dl ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/dev-dl
                 repository: ${{ secrets.CR_USER }}/dev-dl
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image irssi ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/irssi
                 repository: ${{ secrets.CR_USER }}/irssi
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image rtorrent ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/rtorrent
                 repository: ${{ secrets.CR_USER }}/rtorrent
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image ubuntu-base ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/ubuntu-base
                 repository: ${{ secrets.CR_USER }}/ubuntu-base
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image squid ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/squid
                 repository: ${{ secrets.CR_USER }}/squid
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image squid-open ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/squid-open
                 repository: ${{ secrets.CR_USER }}/squid-open
-                tags: latest
-          - name: 'Build:dockerimage'
-            uses: docker/build-push-action@v1
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
+          - name: 'Build image gollum ${{ steps.vars.outputs.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
             with:
                 registry: ghcr.io
+                username: ${{ secrets.CR_USER }}
+                password: ${{ secrets.CR_PAT }}
                 path: dockerfiles/ghcr/gollum
                 repository: ${{ secrets.CR_USER }}/gollum
-                tags: latest
+                tags: [ 'latest', '1.21-${{ steps.vars.outputs.GITHUB_SHA_SHORT }}' ]
