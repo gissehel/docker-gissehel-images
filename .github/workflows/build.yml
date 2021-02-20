@@ -14,9 +14,14 @@ jobs:
           - name: "Build:checkout"
             uses: actions/checkout@v2
           - name: "Set GITHUB_SHA_SHORT env var"
-            run: echo "GITHUB_SHA_SHORT=$(echo ${GITHUB_SHA} | cut -c1-8)" >> "${GITHUB_ENV}"
+            id: github_sha_short
+            run: |
+                echo "GITHUB_SHA_SHORT=$(echo ${GITHUB_SHA} | cut -c1-8)" >> "${GITHUB_ENV}"
+                echo "::set-output name=GITHUB_SHA_SHORT::$(echo ${GITHUB_SHA} | cut -c1-8)"
           - name: pwd
-            run: pwd
+            run: |
+                pwd
+                echo "Test : [${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}]"
           - name: 'Login to github container registry'
             uses: docker/login-action@v1
             with:
@@ -29,8 +34,8 @@ jobs:
                 registry: ghcr.io
                 username: ${{ secrets.CR_USER }}
                 password: ${{ secrets.CR_PAT }}
-                path: dockerfiles/ghcr/ubuntu-sshd
-                context: dockerfiles/ghcr/ubuntu-sshd
+                file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
+                context: .
                 repository: ${{ secrets.CR_USER }}/ubuntu-sshd
                 push: true
                 tags: latest
