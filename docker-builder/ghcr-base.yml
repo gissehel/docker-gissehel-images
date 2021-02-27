@@ -14,12 +14,18 @@ jobs:
         steps:
           - name: "Build:checkout"
             uses: actions/checkout@v2
-          - name: "Set env vars"
+          - name: "Define variables"
             id: envs
             run: |
                 echo "::set-output name=GITHUB_SHA_SHORT::$(echo ${GITHUB_SHA} | cut -c1-8)"
                 echo "::set-output name=VCS_REF::$(echo ${GITHUB_SHA} | cut -c1-8)"
                 echo "::set-output name=BUILD_DATE::$(TZ=Europe/Paris date -Iseconds)"
+          - name: "Set environment variables"
+            uses: allenevans/set-env@v2.0.0
+            with:
+                GITHUB_SHA_SHORT: ${{ steps.envs.outputs.GITHUB_SHA_SHORT }}
+                VCS_REF: ${{ steps.envs.outputs.VCS_REF }}
+                BUILD_DATE: ${{ steps.envs.outputs.BUILD_DATE }}
           - name: 'Login to github container registry'
             uses: docker/login-action@v1
             with:
