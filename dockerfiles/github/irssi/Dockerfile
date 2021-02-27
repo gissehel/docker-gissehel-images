@@ -8,7 +8,7 @@ LABEL \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.name=irssi \
-      org.label-schema.version=1.21-$VCS_REF \
+      org.label-schema.version=1.22-$VCS_REF \
       org.label-schema.vendor=gissehel \
       org.label-schema.vcs-url="https://github.com/gissehel/docker-gissehel-images" \
       org.label-schema.schema-version="1.0"
