@@ -27,6 +27,9 @@ jobs:
                 password: ${{ secrets.CR_PAT }}
           - name: 'Build image ubuntu-sshd ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/ubuntu-sshd/
                 file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
@@ -34,6 +37,9 @@ jobs:
                 tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:latest,ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:1.22,ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/dev/
                 file: dockerfiles/ghcr/dev/Dockerfile
@@ -41,6 +47,9 @@ jobs:
                 tags: ghcr.io/${{ secrets.CR_USER }}/dev:latest,ghcr.io/${{ secrets.CR_USER }}/dev:1.22,ghcr.io/${{ secrets.CR_USER }}/dev:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-lang ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/dev-lang/
                 file: dockerfiles/ghcr/dev-lang/Dockerfile
@@ -48,6 +57,9 @@ jobs:
                 tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang:latest,ghcr.io/${{ secrets.CR_USER }}/dev-lang:1.22,ghcr.io/${{ secrets.CR_USER }}/dev-lang:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-lang:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-lang-java ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/dev-lang-java/
                 file: dockerfiles/ghcr/dev-lang-java/Dockerfile
@@ -55,6 +67,9 @@ jobs:
                 tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:latest,ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:1.22,ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-dl ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/dev-dl/
                 file: dockerfiles/ghcr/dev-dl/Dockerfile
@@ -62,6 +77,9 @@ jobs:
                 tags: ghcr.io/${{ secrets.CR_USER }}/dev-dl:latest,ghcr.io/${{ secrets.CR_USER }}/dev-dl:1.22,ghcr.io/${{ secrets.CR_USER }}/dev-dl:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-dl:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image irssi ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/irssi/
                 file: dockerfiles/ghcr/irssi/Dockerfile
@@ -69,6 +87,9 @@ jobs:
                 tags: ghcr.io/${{ secrets.CR_USER }}/irssi:latest,ghcr.io/${{ secrets.CR_USER }}/irssi:1.22,ghcr.io/${{ secrets.CR_USER }}/irssi:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/irssi:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image ubuntu-base ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/ubuntu-base/
                 file: dockerfiles/ghcr/ubuntu-base/Dockerfile
@@ -76,6 +97,9 @@ jobs:
                 tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:latest,ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:1.22,ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image squid ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/squid/
                 file: dockerfiles/ghcr/squid/Dockerfile
@@ -83,6 +107,9 @@ jobs:
                 tags: ghcr.io/${{ secrets.CR_USER }}/squid:latest,ghcr.io/${{ secrets.CR_USER }}/squid:1.22,ghcr.io/${{ secrets.CR_USER }}/squid:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/squid:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image squid-open ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
+            env:
+                VCS_REF: ${{ env.VCS_REF }}
+                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/squid-open/
                 file: dockerfiles/ghcr/squid-open/Dockerfile
