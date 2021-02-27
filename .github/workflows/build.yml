@@ -27,91 +27,111 @@ jobs:
                 password: ${{ secrets.CR_PAT }}
           - name: 'Build image ubuntu-sshd ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/ubuntu-sshd/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:latest,ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:1.22,ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/dev/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/dev/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/dev:latest,ghcr.io/${{ secrets.CR_USER }}/dev:1.22,ghcr.io/${{ secrets.CR_USER }}/dev:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-lang ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/dev-lang/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/dev-lang/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang:latest,ghcr.io/${{ secrets.CR_USER }}/dev-lang:1.22,ghcr.io/${{ secrets.CR_USER }}/dev-lang:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-lang:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-lang-java ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/dev-lang-java/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/dev-lang-java/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:latest,ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:1.22,ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-dl ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/dev-dl/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/dev-dl/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/dev-dl:latest,ghcr.io/${{ secrets.CR_USER }}/dev-dl:1.22,ghcr.io/${{ secrets.CR_USER }}/dev-dl:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-dl:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image irssi ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/irssi/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/irssi/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/irssi:latest,ghcr.io/${{ secrets.CR_USER }}/irssi:1.22,ghcr.io/${{ secrets.CR_USER }}/irssi:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/irssi:${{ env.GITHUB_SHA_SHORT }}
+          - name: 'Build image rtorrent ${{ env.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/rtorrent/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
+                file: dockerfiles/ghcr/rtorrent/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/rtorrent:latest,ghcr.io/${{ secrets.CR_USER }}/rtorrent:1.22,ghcr.io/${{ secrets.CR_USER }}/rtorrent:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/rtorrent:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image ubuntu-base ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/ubuntu-base/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/ubuntu-base/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:latest,ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:1.22,ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image squid ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/squid/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/squid/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/squid:latest,ghcr.io/${{ secrets.CR_USER }}/squid:1.22,ghcr.io/${{ secrets.CR_USER }}/squid:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/squid:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image squid-open ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
-            env:
-                VCS_REF: ${{ env.VCS_REF }}
-                BUILD_DATE: ${{ env.BUILD_DATE }}
             with:
                 context: dockerfiles/ghcr/squid-open/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/squid-open/Dockerfile
                 push: ${{ github.event_name != 'pull_request' }}
                 tags: ghcr.io/${{ secrets.CR_USER }}/squid-open:latest,ghcr.io/${{ secrets.CR_USER }}/squid-open:1.22,ghcr.io/${{ secrets.CR_USER }}/squid-open:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/squid-open:${{ env.GITHUB_SHA_SHORT }}
+          - name: 'Build image gollum ${{ env.GITHUB_SHA_SHORT }}'
+            uses: docker/build-push-action@v2
+            with:
+                context: dockerfiles/ghcr/gollum/
+                build-args: |
+                    VCS_REF: ${{ env.VCS_REF }}
+                    BUILD_DATE: ${{ env.BUILD_DATE }}
+                file: dockerfiles/ghcr/gollum/Dockerfile
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: ghcr.io/${{ secrets.CR_USER }}/gollum:latest,ghcr.io/${{ secrets.CR_USER }}/gollum:1.22,ghcr.io/${{ secrets.CR_USER }}/gollum:1.22-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/gollum:${{ env.GITHUB_SHA_SHORT }}
