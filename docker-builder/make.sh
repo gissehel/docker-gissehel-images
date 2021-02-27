@@ -164,13 +164,13 @@ add_gitlabci() {
 add_ghcr_action() {
     id="$1"
 
-    echo "          - name: 'Build image ${id} \${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}'" >> "${ghcr_action_filename}"
+    echo "          - name: 'Build image ${id} \${{ steps.envs.outputs.GITHUB_SHA_SHORT }}'" >> "${ghcr_action_filename}"
     echo "            uses: docker/build-push-action@v2" >> "${ghcr_action_filename}"
     echo "            with:" >> "${ghcr_action_filename}"
     echo "                context: ${dockerfiles_relative_dir}/ghcr/${id}/" >> "${ghcr_action_filename}"
     echo "                file: ${dockerfiles_relative_dir}/ghcr/${id}/Dockerfile" >> "${ghcr_action_filename}"
     echo "                push: \${{ github.event_name != 'pull_request' }}" >> "${ghcr_action_filename}"
-    echo "                tags: ghcr.io/\${{ secrets.CR_USER }}/${id}:latest,ghcr.io/\${{ secrets.CR_USER }}/${id}:${VERSION},ghcr.io/\${{ secrets.CR_USER }}/${id}:${VERSION}-\${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }},ghcr.io/\${{ secrets.CR_USER }}/${id}:\${{ steps.github_sha_short.outputs.GITHUB_SHA_SHORT }}" >> "${ghcr_action_filename}"
+    echo "                tags: ghcr.io/\${{ secrets.CR_USER }}/${id}:latest,ghcr.io/\${{ secrets.CR_USER }}/${id}:${VERSION},ghcr.io/\${{ secrets.CR_USER }}/${id}:${VERSION}-\${{ steps.envs.outputs.GITHUB_SHA_SHORT }},ghcr.io/\${{ secrets.CR_USER }}/${id}:\${{ steps.envs.outputs.GITHUB_SHA_SHORT }}" >> "${ghcr_action_filename}"
 }
 
 create_dockerfile_from_id() {
