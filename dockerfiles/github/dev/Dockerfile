@@ -5,11 +5,21 @@ ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL \
-      org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.name=dev \
-      org.label-schema.version=1.23-$VCS_REF \
-      org.label-schema.vendor=gissehel \
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.authors="gissehel" \
+      org.opencontainers.image.url="https://github.com/gissehel/docker-gissehel-images" \
+      org.opencontainers.image.source="https://github.com/gissehel/docker-gissehel-images" \
+      org.opencontainers.image.version="1.23-${VCS_REF}" \
+      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.vendor="gissehel" \
+      org.opencontainers.image.ref.name="gissehel/dev" \
+      org.opencontainers.image.title="dev" \
+      org.opencontainers.image.description="Image for dev" \
+      org.label-schema.build-date="${BUILD_DATE}" \
+      org.label-schema.vcs-ref="${VCS_REF}" \
+      org.label-schema.name="dev" \
+      org.label-schema.version="1.23-${VCS_REF}" \
+      org.label-schema.vendor="gissehel" \
       org.label-schema.vcs-url="https://github.com/gissehel/docker-gissehel-images" \
       org.label-schema.schema-version="1.0"
 
