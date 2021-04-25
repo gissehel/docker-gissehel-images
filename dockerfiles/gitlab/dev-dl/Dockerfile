@@ -9,7 +9,7 @@ LABEL \
       org.opencontainers.image.authors="gissehel" \
       org.opencontainers.image.url="https://github.com/gissehel/docker-gissehel-images" \
       org.opencontainers.image.source="https://github.com/gissehel/docker-gissehel-images" \
-      org.opencontainers.image.version="1.23-${VCS_REF}" \
+      org.opencontainers.image.version="1.24-${VCS_REF}" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.vendor="gissehel" \
       org.opencontainers.image.ref.name="registry.gitlab.com/gissehel/docker-gissehel-images/dev-dl" \
@@ -18,7 +18,7 @@ LABEL \
       org.label-schema.build-date="${BUILD_DATE}" \
       org.label-schema.vcs-ref="${VCS_REF}" \
       org.label-schema.name="dev-dl" \
-      org.label-schema.version="1.23-${VCS_REF}" \
+      org.label-schema.version="1.24-${VCS_REF}" \
       org.label-schema.vendor="gissehel" \
       org.label-schema.vcs-url="https://github.com/gissehel/docker-gissehel-images" \
       org.label-schema.schema-version="1.0"
