@@ -3,8 +3,12 @@
 #:! /bin/bash
 export DEBIAN_FRONTEND=noninteractive
 
+# Fix command-not-found bug (by not using compression for indexes, which is ugly but works)
+# https://bugs.launchpad.net/ubuntu/+source/command-not-found/+bug/1876034
+sed -i -e 's/GzipIndexes "true"/GzipIndexes "false"/' /etc/apt/apt.conf.d/docker-gzip-indexes
+
 apt-get -y update
-apt-get -y install mercurial git subversion mc vim screen man colordiff pandoc bash-completion apt-file netcat-openbsd net-tools nmap inetutils-ping bind9-host jq mcrypt p7zip-full tmux tmuxinator gdebi-core
+apt-get -y install mercurial git subversion mc vim screen man colordiff pandoc bash-completion apt-file netcat-openbsd net-tools nmap inetutils-ping bind9-host jq mcrypt p7zip-full tmux tmuxinator gdebi-core command-not-found
 
 apt-file update
 rm -f /etc/apt/apt.conf.d/docker-clean
