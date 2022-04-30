@@ -7,7 +7,7 @@
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get -y update
-apt-get -y install squid3 apache2-utils
+apt-get -y install squid apache2-utils
 
 rm -f /etc/squid/squid.conf
 mkdir -p /etc/squid/conf
