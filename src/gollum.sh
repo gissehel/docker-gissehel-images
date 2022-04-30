@@ -9,7 +9,7 @@ export DEBIAN_FRONTEND=noninteractive
 # Install dependencies
 apt-get update -y
 apt-get upgrade -y
-apt-get install -y -q build-essential ruby ruby-dev python python-docutils ruby-bundler libicu-dev libreadline-dev libssl-dev zlib1g-dev git-core git libldap2-dev libidn11-dev cmake
+apt-get install -y -q build-essential ruby ruby-dev python3 python3-docutils ruby-bundler libicu-dev libreadline-dev libssl-dev zlib1g-dev git-core git libldap2-dev libidn11-dev cmake
 apt-get clean
 rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
