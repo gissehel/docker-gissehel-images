@@ -16,7 +16,7 @@ dpkg-reconfigure locales
 #apt-mark hold initscripts
 #apt-mark hold fuse
 apt-get -y upgrade
-apt-get -y install unzip wget curl python2 python3 mercurial git sqlite3 mlocate sudo
+apt-get -y install unzip wget curl python2 python3 python-is-python3 mercurial git sqlite3 mlocate sudo
 
 rm -rf /var/lib/apt/lists/*
 rm -f /var/log/dpkg.log

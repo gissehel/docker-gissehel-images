@@ -4,7 +4,7 @@
 export DEBIAN_FRONTEND=noninteractive
 
 apt -y update
-apt -y install openjdk-8-jdk
+apt -y install openjdk-11-jdk
 apt-get clean
 
 rm -rf /var/lib/apt/lists/*

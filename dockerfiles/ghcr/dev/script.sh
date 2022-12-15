@@ -26,6 +26,7 @@ adduser --disabled-password --gecos "" $LOGIN
 printf "$LOGIN\tALL=(ALL:ALL) NOPASSWD: ALL\n" > /etc/sudoers.d/$LOGIN
 chmod 0440 /etc/sudoers.d/$LOGIN
 
+
 mkdir /home/$LOGIN/dev
 chown $LOGIN:$LOGIN /home/$LOGIN/dev
 
@@ -33,7 +34,11 @@ mkdir /home/$LOGIN/.ssh
 chown $LOGIN:$LOGIN /home/$LOGIN/.ssh
 chmod 0770 /home/$LOGIN/.ssh
 
+mkdir -p /home/$LOGIN/bin
 sudo -i -u $LOGIN bash -c "mkdir -p etc; git clone https://github.com/gissehel/dotfiler ~/.dotfiles; git clone https://github.com/gissehel/dot-gissehel ~/.dotfiles/dot-gissehel; git clone https://github.com/gissehel/dot-meta ~/.dotfiles/dot-meta; git clone https://github.com/gissehel/dot-apt ~/.dotfiles/dot-apt; git clone https://github.com/VundleVim/Vundle.vim.git ~/.dotfiles/vundle/.vim/bundle/Vundle.vim; ~/.dotfiles/bin/dot update --skip-pull || ~/.dotfiles/bin/dot update --skip-pull; echo '' | vim -T vt100 --not-a-term +PluginInstall +qall; ~/bin/install-meta; bash ~/.config/e_bash/rc"
+ln -s /home/$LOGIN/.dotfiles/bin/dot /home/$LOGIN/bin/dot
+chown $LOGIN:$LOGIN /home/$LOGIN/bin
+chown -h $LOGIN:$LOGIN /home/$LOGIN/bin/dot
 
 reset
 

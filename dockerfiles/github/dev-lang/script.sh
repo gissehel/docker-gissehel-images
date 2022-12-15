@@ -7,7 +7,7 @@ apt-get -y update
 apt-get -y install apt-transport-https
 curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 apt-add-repository https://packages.microsoft.com/ubuntu/20.04/prod
-curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 apt-get -y update
 apt-get -y install dotnet-sdk-2.1 dotnet-sdk-3.1 dotnet-sdk-5.0
 apt-get -y install make autoconf
