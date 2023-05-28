@@ -41,6 +41,9 @@ jobs:
             uses: "sigstore/cosign-installer@v3.0.5"
             with:
                 cosign-release: "v2.0.2"
+          # Workaround: https://github.com/docker/build-push-action/issues/461
+          - name: "Setup Docker buildx"
+            uses: "docker/setup-buildx-action@v2.5.0"
           - name: 'Login to github container registry'
             uses: docker/login-action@v2.1.0
             with:
@@ -54,7 +57,7 @@ jobs:
                 username: "${{ env.DOCKER_HUB_USER }}"
                 password: "${{ secrets.DOCKER_HUB_TOKEN }}"
           - name: 'Build image ubuntu-sshd ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/ubuntu-sshd/
                 build-args: |
@@ -63,7 +66,7 @@ jobs:
                 file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/ubuntu-sshd:latest,${{ env.GH_PREFIX }}/ubuntu-sshd:1.27,${{ env.GH_PREFIX }}/ubuntu-sshd:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/ubuntu-sshd:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/ubuntu-sshd:latest,${{ env.DOCKER_HUB_PREFIX }}/ubuntu-sshd:1.27,${{ env.DOCKER_HUB_PREFIX }}/ubuntu-sshd:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/ubuntu-sshd:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/dev/
                 build-args: |
@@ -72,7 +75,7 @@ jobs:
                 file: dockerfiles/ghcr/dev/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/dev:latest,${{ env.GH_PREFIX }}/dev:1.27,${{ env.GH_PREFIX }}/dev:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/dev:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev:latest,${{ env.DOCKER_HUB_PREFIX }}/dev:1.27,${{ env.DOCKER_HUB_PREFIX }}/dev:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-lang ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/dev-lang/
                 build-args: |
@@ -81,7 +84,7 @@ jobs:
                 file: dockerfiles/ghcr/dev-lang/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/dev-lang:latest,${{ env.GH_PREFIX }}/dev-lang:1.27,${{ env.GH_PREFIX }}/dev-lang:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/dev-lang:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-lang:latest,${{ env.DOCKER_HUB_PREFIX }}/dev-lang:1.27,${{ env.DOCKER_HUB_PREFIX }}/dev-lang:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-lang:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-lang-java ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/dev-lang-java/
                 build-args: |
@@ -90,7 +93,7 @@ jobs:
                 file: dockerfiles/ghcr/dev-lang-java/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/dev-lang-java:latest,${{ env.GH_PREFIX }}/dev-lang-java:1.27,${{ env.GH_PREFIX }}/dev-lang-java:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/dev-lang-java:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-lang-java:latest,${{ env.DOCKER_HUB_PREFIX }}/dev-lang-java:1.27,${{ env.DOCKER_HUB_PREFIX }}/dev-lang-java:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-lang-java:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-dl ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/dev-dl/
                 build-args: |
@@ -99,7 +102,7 @@ jobs:
                 file: dockerfiles/ghcr/dev-dl/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/dev-dl:latest,${{ env.GH_PREFIX }}/dev-dl:1.27,${{ env.GH_PREFIX }}/dev-dl:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/dev-dl:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-dl:latest,${{ env.DOCKER_HUB_PREFIX }}/dev-dl:1.27,${{ env.DOCKER_HUB_PREFIX }}/dev-dl:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-dl:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image irssi ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/irssi/
                 build-args: |
@@ -108,7 +111,7 @@ jobs:
                 file: dockerfiles/ghcr/irssi/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/irssi:latest,${{ env.GH_PREFIX }}/irssi:1.27,${{ env.GH_PREFIX }}/irssi:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/irssi:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/irssi:latest,${{ env.DOCKER_HUB_PREFIX }}/irssi:1.27,${{ env.DOCKER_HUB_PREFIX }}/irssi:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/irssi:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image rtorrent ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/rtorrent/
                 build-args: |
@@ -117,7 +120,7 @@ jobs:
                 file: dockerfiles/ghcr/rtorrent/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/rtorrent:latest,${{ env.GH_PREFIX }}/rtorrent:1.27,${{ env.GH_PREFIX }}/rtorrent:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/rtorrent:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/rtorrent:latest,${{ env.DOCKER_HUB_PREFIX }}/rtorrent:1.27,${{ env.DOCKER_HUB_PREFIX }}/rtorrent:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/rtorrent:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image ubuntu-base ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/ubuntu-base/
                 build-args: |
@@ -126,7 +129,7 @@ jobs:
                 file: dockerfiles/ghcr/ubuntu-base/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/ubuntu-base:latest,${{ env.GH_PREFIX }}/ubuntu-base:1.27,${{ env.GH_PREFIX }}/ubuntu-base:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/ubuntu-base:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/ubuntu-base:latest,${{ env.DOCKER_HUB_PREFIX }}/ubuntu-base:1.27,${{ env.DOCKER_HUB_PREFIX }}/ubuntu-base:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/ubuntu-base:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image squid ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/squid/
                 build-args: |
@@ -135,7 +138,7 @@ jobs:
                 file: dockerfiles/ghcr/squid/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/squid:latest,${{ env.GH_PREFIX }}/squid:1.27,${{ env.GH_PREFIX }}/squid:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/squid:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/squid:latest,${{ env.DOCKER_HUB_PREFIX }}/squid:1.27,${{ env.DOCKER_HUB_PREFIX }}/squid:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/squid:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image squid-open ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/squid-open/
                 build-args: |
@@ -144,7 +147,7 @@ jobs:
                 file: dockerfiles/ghcr/squid-open/Dockerfile
                 tags: ${{ env.GH_PREFIX }}/squid-open:latest,${{ env.GH_PREFIX }}/squid-open:1.27,${{ env.GH_PREFIX }}/squid-open:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/squid-open:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/squid-open:latest,${{ env.DOCKER_HUB_PREFIX }}/squid-open:1.27,${{ env.DOCKER_HUB_PREFIX }}/squid-open:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/squid-open:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image gollum ${{ env.GITHUB_SHA_SHORT }}'
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v4.0.0
             with:
                 context: dockerfiles/ghcr/gollum/
                 build-args: |
