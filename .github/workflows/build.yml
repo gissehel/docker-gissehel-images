@@ -7,30 +7,52 @@ on:
     push:
         branches:
             - master
-    pull_request:
 jobs:
     build:
         name: 'Build'
         runs-on: ubuntu-latest
         steps:
           - name: "Build:checkout"
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
           - name: "Set environment variables"
             run: |
-                echo "GITHUB_SHA_SHORT=$(echo ${GITHUB_SHA} | cut -c1-8)" >> "${GITHUB_ENV}"
-                echo "VCS_REF=$(echo ${GITHUB_SHA} | cut -c1-8)" >> "${GITHUB_ENV}"
-                echo "BUILD_DATE=$(TZ=Europe/Paris date -Iseconds)" >> "${GITHUB_ENV}"
+                export_ga() {
+                    for _name in "${@}"
+                    do
+                        local _key="${_name%%=*}"
+                        local _value="${_name#*=}"
+                        [ "${_key}" == "${_name}" ] && _value="${!_name}"
+                        export $_key="${_value}"
+                        echo "${_key}=${_value}" >> "${GITHUB_ENV}"
+                    done
+                }
+
+                export_ga GITHUB_SHA_SHORT="$(git rev-parse --short HEAD)"
+                export_ga VCS_REF="$(echo ${GITHUB_SHA} | cut -c1-8)"
+                export_ga BUILD_DATE="$(TZ=Europe/Paris date -Iseconds)"
+
+                export_ga GH_REGISTRY="ghcr.io"
+                export_ga GH_USER="${{ github.actor }}"
+                export_da GH_PREFIX="${GH_REGISTRY}/${GH_USER}"
+                export_ga DOCKER_HUB_REGISTRY="docker.io"
+                export_ga DOCKER_HUB_USER="${{ vars.DOCKER_HUB_USER }}"
+                export_ga DOCKER_HUB_PREFIX="${DOCKER_HUB_REGISTRY}/${DOCKER_HUB_USER}"
+          - name: "Install cosign"
+            uses: "sigstore/cosign-installer@v3.0.5"
+            with:
+                cosign-release: "v2.0.2"
           - name: 'Login to github container registry'
-            uses: docker/login-action@v1
+            uses: docker/login-action@v2.1.0
             with:
-                registry: ghcr.io
-                username: ${{ secrets.CR_USER }}
-                password: ${{ secrets.CR_PAT }}
+                registry: "${{ env.GH_REGISTRY }}"
+                username: "${{ env.GH_USER }}"
+                password: "${{ secrets.GITHUB_TOKEN }}"
           - name: 'Login to docker hub'
-            uses: docker/login-action@v1
+            uses: docker/login-action@v2.1.0
             with:
-                username: ${{ secrets.DH_USER }}
-                password: ${{ secrets.DH_PAT }}
+                registry: "${{ env.DOCKER_HUB_REGISTRY }}"
+                username: "${{ env.DOCKER_HUB_USER }}"
+                password: "${{ secrets.DOCKER_HUB_TOKEN }}"
           - name: 'Build image ubuntu-sshd ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -39,8 +61,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/ubuntu-sshd/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:latest,ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:1.26,ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/ubuntu-sshd:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/ubuntu-sshd:latest,${{ secrets.CR_USER }}/ubuntu-sshd:1.26,${{ secrets.CR_USER }}/ubuntu-sshd:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/ubuntu-sshd:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/ubuntu-sshd:latest,${{ env.GH_PREFIX }}/ubuntu-sshd:1.27,${{ env.GH_PREFIX }}/ubuntu-sshd:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/ubuntu-sshd:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/ubuntu-sshd:latest,${{ env.DOCKER_HUB_PREFIX }}/ubuntu-sshd:1.27,${{ env.DOCKER_HUB_PREFIX }}/ubuntu-sshd:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/ubuntu-sshd:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -49,8 +70,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/dev/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/dev:latest,ghcr.io/${{ secrets.CR_USER }}/dev:1.26,ghcr.io/${{ secrets.CR_USER }}/dev:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/dev:latest,${{ secrets.CR_USER }}/dev:1.26,${{ secrets.CR_USER }}/dev:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/dev:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/dev:latest,${{ env.GH_PREFIX }}/dev:1.27,${{ env.GH_PREFIX }}/dev:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/dev:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev:latest,${{ env.DOCKER_HUB_PREFIX }}/dev:1.27,${{ env.DOCKER_HUB_PREFIX }}/dev:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-lang ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -59,8 +79,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/dev-lang/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang:latest,ghcr.io/${{ secrets.CR_USER }}/dev-lang:1.26,ghcr.io/${{ secrets.CR_USER }}/dev-lang:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-lang:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/dev-lang:latest,${{ secrets.CR_USER }}/dev-lang:1.26,${{ secrets.CR_USER }}/dev-lang:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/dev-lang:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/dev-lang:latest,${{ env.GH_PREFIX }}/dev-lang:1.27,${{ env.GH_PREFIX }}/dev-lang:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/dev-lang:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-lang:latest,${{ env.DOCKER_HUB_PREFIX }}/dev-lang:1.27,${{ env.DOCKER_HUB_PREFIX }}/dev-lang:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-lang:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-lang-java ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -69,8 +88,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/dev-lang-java/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:latest,ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:1.26,ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-lang-java:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/dev-lang-java:latest,${{ secrets.CR_USER }}/dev-lang-java:1.26,${{ secrets.CR_USER }}/dev-lang-java:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/dev-lang-java:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/dev-lang-java:latest,${{ env.GH_PREFIX }}/dev-lang-java:1.27,${{ env.GH_PREFIX }}/dev-lang-java:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/dev-lang-java:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-lang-java:latest,${{ env.DOCKER_HUB_PREFIX }}/dev-lang-java:1.27,${{ env.DOCKER_HUB_PREFIX }}/dev-lang-java:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-lang-java:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image dev-dl ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -79,8 +97,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/dev-dl/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/dev-dl:latest,ghcr.io/${{ secrets.CR_USER }}/dev-dl:1.26,ghcr.io/${{ secrets.CR_USER }}/dev-dl:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/dev-dl:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/dev-dl:latest,${{ secrets.CR_USER }}/dev-dl:1.26,${{ secrets.CR_USER }}/dev-dl:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/dev-dl:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/dev-dl:latest,${{ env.GH_PREFIX }}/dev-dl:1.27,${{ env.GH_PREFIX }}/dev-dl:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/dev-dl:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-dl:latest,${{ env.DOCKER_HUB_PREFIX }}/dev-dl:1.27,${{ env.DOCKER_HUB_PREFIX }}/dev-dl:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/dev-dl:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image irssi ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -89,8 +106,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/irssi/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/irssi:latest,ghcr.io/${{ secrets.CR_USER }}/irssi:1.26,ghcr.io/${{ secrets.CR_USER }}/irssi:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/irssi:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/irssi:latest,${{ secrets.CR_USER }}/irssi:1.26,${{ secrets.CR_USER }}/irssi:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/irssi:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/irssi:latest,${{ env.GH_PREFIX }}/irssi:1.27,${{ env.GH_PREFIX }}/irssi:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/irssi:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/irssi:latest,${{ env.DOCKER_HUB_PREFIX }}/irssi:1.27,${{ env.DOCKER_HUB_PREFIX }}/irssi:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/irssi:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image rtorrent ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -99,8 +115,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/rtorrent/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/rtorrent:latest,ghcr.io/${{ secrets.CR_USER }}/rtorrent:1.26,ghcr.io/${{ secrets.CR_USER }}/rtorrent:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/rtorrent:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/rtorrent:latest,${{ secrets.CR_USER }}/rtorrent:1.26,${{ secrets.CR_USER }}/rtorrent:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/rtorrent:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/rtorrent:latest,${{ env.GH_PREFIX }}/rtorrent:1.27,${{ env.GH_PREFIX }}/rtorrent:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/rtorrent:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/rtorrent:latest,${{ env.DOCKER_HUB_PREFIX }}/rtorrent:1.27,${{ env.DOCKER_HUB_PREFIX }}/rtorrent:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/rtorrent:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image ubuntu-base ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -109,8 +124,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/ubuntu-base/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:latest,ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:1.26,ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/ubuntu-base:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/ubuntu-base:latest,${{ secrets.CR_USER }}/ubuntu-base:1.26,${{ secrets.CR_USER }}/ubuntu-base:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/ubuntu-base:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/ubuntu-base:latest,${{ env.GH_PREFIX }}/ubuntu-base:1.27,${{ env.GH_PREFIX }}/ubuntu-base:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/ubuntu-base:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/ubuntu-base:latest,${{ env.DOCKER_HUB_PREFIX }}/ubuntu-base:1.27,${{ env.DOCKER_HUB_PREFIX }}/ubuntu-base:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/ubuntu-base:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image squid ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -119,8 +133,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/squid/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/squid:latest,ghcr.io/${{ secrets.CR_USER }}/squid:1.26,ghcr.io/${{ secrets.CR_USER }}/squid:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/squid:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/squid:latest,${{ secrets.CR_USER }}/squid:1.26,${{ secrets.CR_USER }}/squid:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/squid:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/squid:latest,${{ env.GH_PREFIX }}/squid:1.27,${{ env.GH_PREFIX }}/squid:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/squid:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/squid:latest,${{ env.DOCKER_HUB_PREFIX }}/squid:1.27,${{ env.DOCKER_HUB_PREFIX }}/squid:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/squid:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image squid-open ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -129,8 +142,7 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/squid-open/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/squid-open:latest,ghcr.io/${{ secrets.CR_USER }}/squid-open:1.26,ghcr.io/${{ secrets.CR_USER }}/squid-open:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/squid-open:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/squid-open:latest,${{ secrets.CR_USER }}/squid-open:1.26,${{ secrets.CR_USER }}/squid-open:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/squid-open:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/squid-open:latest,${{ env.GH_PREFIX }}/squid-open:1.27,${{ env.GH_PREFIX }}/squid-open:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/squid-open:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/squid-open:latest,${{ env.DOCKER_HUB_PREFIX }}/squid-open:1.27,${{ env.DOCKER_HUB_PREFIX }}/squid-open:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/squid-open:${{ env.GITHUB_SHA_SHORT }}
           - name: 'Build image gollum ${{ env.GITHUB_SHA_SHORT }}'
             uses: docker/build-push-action@v2
             with:
@@ -139,5 +151,4 @@ jobs:
                     VCS_REF=${{ env.VCS_REF }}
                     BUILD_DATE=${{ env.BUILD_DATE }}
                 file: dockerfiles/ghcr/gollum/Dockerfile
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: ghcr.io/${{ secrets.CR_USER }}/gollum:latest,ghcr.io/${{ secrets.CR_USER }}/gollum:1.26,ghcr.io/${{ secrets.CR_USER }}/gollum:1.26-${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ secrets.CR_USER }}/gollum:${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/gollum:latest,${{ secrets.CR_USER }}/gollum:1.26,${{ secrets.CR_USER }}/gollum:1.26-${{ env.GITHUB_SHA_SHORT }},${{ secrets.CR_USER }}/gollum:${{ env.GITHUB_SHA_SHORT }}
+                tags: ${{ env.GH_PREFIX }}/gollum:latest,${{ env.GH_PREFIX }}/gollum:1.27,${{ env.GH_PREFIX }}/gollum:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.GH_PREFIX }}/gollum:${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/gollum:latest,${{ env.DOCKER_HUB_PREFIX }}/gollum:1.27,${{ env.DOCKER_HUB_PREFIX }}/gollum:1.27-${{ env.GITHUB_SHA_SHORT }},${{ env.DOCKER_HUB_PREFIX }}/gollum:${{ env.GITHUB_SHA_SHORT }}
