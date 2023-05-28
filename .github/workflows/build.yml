@@ -28,7 +28,7 @@ jobs:
                 }
 
                 export_ga GITHUB_SHA_SHORT="$(git rev-parse --short HEAD)"
-                export_ga VCS_REF="$(echo ${GITHUB_SHA} | cut -c1-8)"
+                export_ga VCS_REF="${GITHUB_SHA_SHORT}"
                 export_ga BUILD_DATE="$(TZ=Europe/Paris date -Iseconds)"
 
                 export_ga GH_REGISTRY="ghcr.io"
