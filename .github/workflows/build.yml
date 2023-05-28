@@ -33,7 +33,7 @@ jobs:
 
                 export_ga GH_REGISTRY="ghcr.io"
                 export_ga GH_USER="${{ github.actor }}"
-                export_da GH_PREFIX="${GH_REGISTRY}/${GH_USER}"
+                export_ga GH_PREFIX="${GH_REGISTRY}/${GH_USER}"
                 export_ga DOCKER_HUB_REGISTRY="docker.io"
                 export_ga DOCKER_HUB_USER="${{ vars.DOCKER_HUB_USER }}"
                 export_ga DOCKER_HUB_PREFIX="${DOCKER_HUB_REGISTRY}/${DOCKER_HUB_USER}"
