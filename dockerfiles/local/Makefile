@@ -2,6 +2,7 @@
 none:
 	echo "nothing to do..."
 
+
 .PHONY:all
 
 .PHONY:clean
@@ -16,10 +17,10 @@ clean:
 .PHONY:ubuntu-sshd
 all:ubuntu-sshd
 ubuntu-sshd:ubuntu-sshd.local-image
-ubuntu-sshd.local-image: phusion-baseimage--master.remote-image
+ubuntu-sshd.local-image: phusion-baseimage--jammy-1.0.1.remote-image
 
-phusion-baseimage--master.remote-image:
-	docker pull "phusion/baseimage:master" && touch "$@"
+phusion-baseimage--jammy-1.0.1.remote-image:
+	docker pull "phusion/baseimage:jammy-1.0.1" && touch "$@"
 
 .PHONY:dev
 all:dev

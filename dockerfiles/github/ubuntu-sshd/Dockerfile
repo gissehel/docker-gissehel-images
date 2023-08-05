@@ -1,4 +1,4 @@
-FROM phusion/baseimage:master
+FROM phusion/baseimage:jammy-1.0.1
 MAINTAINER Gissehel <public-docker-github-ubuntu-sshd-maintainer@gissehel.org>
 
 ARG BUILD_DATE
