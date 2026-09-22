@@ -2,6 +2,7 @@
 none:
 	echo "nothing to do..."
 
+
 .PHONY:all
 
 .PHONY:clean
@@ -10,7 +11,7 @@ clean:
 	rm -rf *.remote-image
 
 %.local-image: %/*
-	bash -c 'NAME="$${0%.local-image}"; cd "$${NAME}"; docker build --no-cache --force-rm --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` -t local-$${NAME} .' "$@" && touch "$@"
+	bash -c 'NAME="$${0%.local-image}"; cd "$${NAME}"; docker buildx build --no-cache --force-rm --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` -t local-$${NAME} .' "$@" && touch "$@"
 
 
 .PHONY:ubuntu-base
