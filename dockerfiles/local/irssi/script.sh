@@ -1,8 +1,9 @@
-#:D FROM {image_prefix}ubuntu-sshd:latest
-#:D MAINTAINER Gissehel <public-docker-{flavor}-{id}-maintainer@gissehel.org>
+#:D FROM {image_prefix}ubuntu-base:latest
+#:D # MAINTAINER Gissehel <public-docker-{flavor}-{id}-maintainer@gissehel.org>
+#:E CMD ["/start"]
 #:! /bin/bash
 
-STARTIRSSI="/etc/my_init.d/50_start-irssi.sh"
+STARTIRSSI="/start"
 apt-get -y update
 apt-get -y install irssi screen
 adduser --disabled-password --gecos "" irssi
@@ -24,6 +25,7 @@ chmod 0777 /var/run/screen
 cat <<__END__ > "$STARTIRSSI"
 #!/usr/bin/env bash
 start-stop-daemon --start --background --chuid irssi:irssi --exec /usr/bin/screen -- -AmdS irssi /usr/bin/irssi
+sleep infinity
 __END__
 
 chmod +x "$STARTIRSSI"

@@ -7,7 +7,7 @@ project_url="https://github.com/${github_project}"
 vendor="gissehel"
 authors="gissehel"
 src_dir="src"
-project_images="ubuntu-sshd dev dev-lang dev-lang-java dev-dl irssi rtorrent ubuntu-base squid squid-open gollum"
+project_images="ubuntu-base ubuntu-unmin dev dev-lang dev-lang-java dev-dl irssi"
 
 
 

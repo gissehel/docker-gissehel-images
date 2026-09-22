@@ -1,11 +1,11 @@
 #:D FROM {image_prefix}dev:latest
-#:D MAINTAINER Gissehel <public-docker-{flavor}-{id}-maintainer@gissehel.org>
+#:D # MAINTAINER Gissehel <public-docker-{flavor}-{id}-maintainer@gissehel.org>
 #:! /bin/bash
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get -y update
-apt-get -y install make
-apt-get -y install unrar unzip par2 mplayer ffmpeg handbrake-cli
+DEBIAN_FRONTEND=noninteractive apt -y update
+DEBIAN_FRONTEND=noninteractive apt -y install make
+DEBIAN_FRONTEND=noninteractive apt -y install unrar unzip par2 mplayer ffmpeg handbrake-cli
 
 LOGIN=gissehel
 GROUP=$LOGIN
@@ -25,8 +25,8 @@ echo "monip" >> "${BASH_HISTORY}"
 chown gissehel:gissehel "${BASH_HISTORY}"
 chmod 0644 "${BASH_HISTORY}"
 
-curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-chmod a+rx /usr/local/bin/youtube-dl
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -o /usr/local/bin/yt-dlp
+chmod a+rx /usr/local/bin/yt-dlp
 
 
 rm -rf /var/lib/apt/lists/*

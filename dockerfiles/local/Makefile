@@ -2,7 +2,6 @@
 none:
 	echo "nothing to do..."
 
-
 .PHONY:all
 
 .PHONY:clean
@@ -14,18 +13,23 @@ clean:
 	bash -c 'NAME="$${0%.local-image}"; cd "$${NAME}"; docker build --no-cache --force-rm --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` -t local-$${NAME} .' "$@" && touch "$@"
 
 
-.PHONY:ubuntu-sshd
-all:ubuntu-sshd
-ubuntu-sshd:ubuntu-sshd.local-image
-ubuntu-sshd.local-image: phusion-baseimage--jammy-1.0.1.remote-image
+.PHONY:ubuntu-base
+all:ubuntu-base
+ubuntu-base:ubuntu-base.local-image
+ubuntu-base.local-image: ubuntu--latest.remote-image
 
-phusion-baseimage--jammy-1.0.1.remote-image:
-	docker pull "phusion/baseimage:jammy-1.0.1" && touch "$@"
+ubuntu--latest.remote-image:
+	docker pull "ubuntu:latest" && touch "$@"
+
+.PHONY:ubuntu-unmin
+all:ubuntu-unmin
+ubuntu-unmin:ubuntu-unmin.local-image
+ubuntu-unmin.local-image: ubuntu-base.local-image
 
 .PHONY:dev
 all:dev
 dev:dev.local-image
-dev.local-image: ubuntu-sshd.local-image
+dev.local-image: ubuntu-unmin.local-image
 
 .PHONY:dev-lang
 all:dev-lang
@@ -45,33 +49,5 @@ dev-dl.local-image: dev.local-image
 .PHONY:irssi
 all:irssi
 irssi:irssi.local-image
-irssi.local-image: ubuntu-sshd.local-image
-
-.PHONY:rtorrent
-all:rtorrent
-rtorrent:rtorrent.local-image
-rtorrent.local-image: ubuntu-sshd.local-image
-
-.PHONY:ubuntu-base
-all:ubuntu-base
-ubuntu-base:ubuntu-base.local-image
-ubuntu-base.local-image: ubuntu--latest.remote-image
-
-ubuntu--latest.remote-image:
-	docker pull "ubuntu:latest" && touch "$@"
-
-.PHONY:squid
-all:squid
-squid:squid.local-image
-squid.local-image: ubuntu-base.local-image
-
-.PHONY:squid-open
-all:squid-open
-squid-open:squid-open.local-image
-squid-open.local-image: ubuntu-base.local-image
-
-.PHONY:gollum
-all:gollum
-gollum:gollum.local-image
-gollum.local-image: ubuntu-base.local-image
+irssi.local-image: ubuntu-base.local-image
 
