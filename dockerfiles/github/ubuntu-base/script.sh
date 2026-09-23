@@ -19,6 +19,21 @@ dpkg-reconfigure --frontend noninteractive tzdata
 
 grep -E "^ubuntu:" /etc/passwd >/dev/null 2>&1 && deluser ubuntu
 
+cat > /startd << EOF
+#!/usr/bin/env bash
+
+# /etc/my_init.d is the same convention as phusion/baseimage but it may not exists
+# script to use as a command for "attach" usage only...
+
+for filename in /etc/my_init.d
+do
+  [ -f "${filename}" ] && . "${filename}"
+done
+
+sleep infinity
+EOF
+chmod +x /startd
+
 rm -rf /var/lib/apt/lists/*
 rm -f /var/log/dpkg.log
 rm -rf /var/log/apt
