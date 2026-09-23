@@ -25,9 +25,9 @@ cat > /startd << EOF
 # /etc/my_init.d is the same convention as phusion/baseimage but it may not exists
 # script to use as a command for "attach" usage only...
 
-for filename in /etc/my_init.d
+for filename in /etc/my_init.d/*
 do
-  [ -f "${filename}" ] && . "${filename}"
+  [ -f "\${filename}" ] && . "\${filename}"
 done
 
 sleep infinity
