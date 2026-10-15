@@ -12,7 +12,7 @@ dpkg-reconfigure locales
 
 apt update -y
 apt upgrade -y
-apt install -y unzip wget curl tzdata sudo git sqlite3 adduser
+apt install -y unzip wget curl tzdata sudo git sqlite3 adduser bind9-dnsutils
 update-alternatives --set sudo /usr/bin/sudo.ws
 ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
 dpkg-reconfigure --frontend noninteractive tzdata
